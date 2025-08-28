@@ -1,6 +1,10 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Lock, Eye, User, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 function App() {
+	const [showPassword, setShowPassword] = useState(false);
 
 	return (
 		<div className="flex flex-col justify-center min-h-screen p-4">
@@ -21,6 +25,22 @@ function App() {
 					Acessar Perfil
 				</Button>
 
+				<div>
+					<Input
+						type="email"
+						placeholder="Usuário ou E-mail"
+						error=""
+						leftIcon={<User />}
+					/>
+					<Input
+						type={showPassword ? "text" : "password"}
+						placeholder="Senha"
+						error=""
+						leftIcon={<Lock />}
+						rightIcon={showPassword ? <Eye /> : <EyeOff />}
+						onPressRightIcon={() => setShowPassword(!showPassword)}
+					/>
+				</div>
 			</div>
 		</div>
 	);

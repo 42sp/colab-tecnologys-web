@@ -13,8 +13,7 @@ const buttonVariants = cva(
 					"bg-primary text-primary-foreground shadow-xs hover:opacity-90 active:opacity-80",
 				outline:
 					"border bg-background text-primary shadow-xs hover:opacity-80 active:bg-secondary/90",
-				secondary:
-					"bg-secondary text-primary shadow-xs",
+				secondary: "bg-secondary text-primary shadow-xs",
 				ghost: "text-primary hover:opacity-80 active:opacity-60",
 			},
 			size: {
@@ -52,4 +51,4 @@ function Button({
 	);
 }
 
-export { Button, buttonVariants };
+export { Button };
