@@ -1,0 +1,107 @@
+@reference "tailwindcss";
+
+.cards-container {
+	@apply flex
+		flex-1
+
+		space-x-5
+
+		/* bg-amber-200 */
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}
+
+.card-component-container {
+	@apply
+	/* flex */
+		items-center
+		justify-between
+
+		h-[150px]
+		px-5
+
+		border-gray-400
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}
+
+.fields-container {
+	@apply flex
+
+		justify-between
+
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}

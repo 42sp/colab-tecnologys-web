@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+.personal-data-form-container {
+	@apply grid w-full  gap-6 p-6
+		/* bg-red-500 */
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}
+
+.address-form-container {
+	@apply grid p-6
+
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}
+
+.professional-information-container {
+	@apply grid p-6
+
+		/* max-sm ( width < 640px ) */
+		/* sm ( width >= 640px ) */
+
+		/* max-md ( width < 768px ) */
+		/* md ( width >= 768px ) */
+
+		/* max-lg ( width < 1024px ) */
+		/* lg ( width >= 1024px ) */
+
+		/* max-xl ( width < 1280px ) */
+		/* xl ( width >= 1280px ) */
+
+		/* max-2xl ( width < 1536px ) */
+		/* 2xl ( width >= 1536px ) */
+
+		/* text-sm */
+
+		/* text-base */
+
+		/* text-lg */
+
+		/* text-xl */
+
+		/* text-2xl */
+
+		/* */;
+}
