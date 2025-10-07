@@ -16,6 +16,7 @@ function App() {
 	<ThemeProvider defaultTheme="light" storageKey="segy-ui-theme">
 		<BrowserRouter>
 			<Routes>
+
 				<Route
 					path="/"
 					element={
