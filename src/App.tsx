@@ -1,48 +1,67 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Lock, Eye, User, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "@/pages/Login";
+import ProtecteRoute from "./components/ProtecteRoute";
+import Dashboard from "./pages/Dashboard";
+import Employee from "./pages/Employee";
+import Services from "./pages/Services";
+import Enterprises from "./pages/Enterprises";
+import UserRegistration from "./pages/UserRegistration";
+// import ProtecteRoute from "./components/ProtecteRoute";
+// import Dashboard from "./pages/Dashboard";
 
 function App() {
-	const [showPassword, setShowPassword] = useState(false);
 
 	return (
-		<div className="flex flex-col justify-center min-h-screen p-4">
-			<div className="w-full max-w-112 mx-auto gap-4 flex flex-col">
-				<Button variant="default" size="lg" className="w-full">
-					Explorar
-				</Button>
-
-				<Button variant="outline" size="lg" className="w-full">
-					Descobrir Novidades
-				</Button>
-
-				<Button variant="secondary" size="lg" className="w-full">
-					Ver Projetos
-				</Button>
-
-				<Button variant="ghost" size="lg" className="w-full">
-					Acessar Perfil
-				</Button>
-
-				<div>
-					<Input
-						type="email"
-						placeholder="Usuário ou E-mail"
-						error=""
-						leftIcon={<User />}
-					/>
-					<Input
-						type={showPassword ? "text" : "password"}
-						placeholder="Senha"
-						error=""
-						leftIcon={<Lock />}
-						rightIcon={showPassword ? <Eye /> : <EyeOff />}
-						onPressRightIcon={() => setShowPassword(!showPassword)}
-					/>
-				</div>
-			</div>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<Login />
+					}
+				/>
+				<Route
+					path="/dashboard"
+					element={
+						<ProtecteRoute>
+							<Dashboard />
+						</ProtecteRoute>
+					}
+				/>
+				<Route
+					path="/servicos"
+					element={
+						<ProtecteRoute>
+							<Services />
+						</ProtecteRoute>
+					}
+				/>
+				<Route
+					path="/funcionarios"
+					element={
+						<ProtecteRoute>
+							<Employee />
+						</ProtecteRoute>
+					}
+				/>
+				<Route
+					path="/empreendimentos"
+					element={
+						<ProtecteRoute>
+							<Enterprises />
+						</ProtecteRoute>
+					}
+				/>
+				<Route
+					path="/cadastro-usuario"
+					element={
+						<ProtecteRoute>
+							<UserRegistration />
+						</ProtecteRoute>
+					}
+				/>
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
