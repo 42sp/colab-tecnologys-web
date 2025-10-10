@@ -1,38 +1,38 @@
-import './style.css';
-import BreadcrumbService from './BreadcrumbService';
-import FieldsServices from './FieldsServices';
+import "./style.css";
+import BreadcrumbService from "./BreadcrumbService";
+import FieldsServices from "./FieldsServices";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 export type Services = {
-  idServico: string
-  torre: string
-  nPav: string
-  pav: string
-  apartamento: string
-  classificacao: string
-  servico: string
-  servicoEmContrato: string
-  parecerDesvio: string
-  espessura: string
-  quantMco: number
-  quantMat: number
-  quantFunc: number
-  bonus: string
-  unidadeMedida: string
-  unidadeMaterial: string
-  ativo: boolean
-  dataRealizacaoServico: string
-  dataLancamento: string
-  porcentagem: number
-  tarifario: string
-  codigoMatricula: string
-}
+  idServico: string;
+  torre: string;
+  nPav: string;
+  pav: string;
+  apartamento: string;
+  classificacao: string;
+  servico: string;
+  servicoEmContrato: string;
+  parecerDesvio: string;
+  espessura: string;
+  quantMco: number;
+  quantMat: number;
+  quantFunc: number;
+  bonus: string;
+  unidadeMedida: string;
+  unidadeMaterial: string;
+  ativo: boolean;
+  dataRealizacaoServico: string;
+  dataLancamento: string;
+  porcentagem: number;
+  tarifario: string;
+  codigoMatricula: string;
+};
 
 export const columns: ColumnDef<Services>[] = [
   {
@@ -154,9 +154,13 @@ export const columns: ColumnDef<Services>[] = [
     minSize: 60,
     maxSize: 100,
     cell: ({ row }) => (
-      <span className={`px-2 py-1 rounded text-xs whitespace-nowrap inline-block ${
-        row.getValue("ativo") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-      }`}>
+      <span
+        className={`px-2 py-1 rounded text-sm whitespace-nowrap inline-block ${
+          row.getValue("ativo")
+            ? "bg-green-100 text-green-800"
+            : "bg-red-100 text-red-800"
+        }`}
+      >
         {row.getValue("ativo") ? "Sim" : "Não"}
       </span>
     ),
@@ -199,7 +203,7 @@ export const columns: ColumnDef<Services>[] = [
     minSize: 120,
     maxSize: 170,
   },
-]
+];
 
 import {
   Table,
@@ -208,9 +212,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import FooterService from './FooterService';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/table";
+import FooterService from "./FooterService";
+import { cn } from "@/lib/utils";
 
 function getData(): Services[] {
   return [
@@ -263,96 +267,129 @@ function getData(): Services[] {
       codigoMatricula: "MAT456",
     },
     // ...
-  ]
+  ];
 }
 
 const TableServices = () => {
-	const data = getData();
+  const data = getData();
 
-	const table = useReactTable({
+  const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    columnResizeMode: 'onChange',
+    columnResizeMode: "onChange",
     defaultColumn: {
       size: 150,
       minSize: 80,
       maxSize: 300,
     },
-  })
+  });
 
-	return (
-		<div className='w-full max-w-full'>
-			<BreadcrumbService />
-			<FieldsServices />
+  return (
+    <div className="w-full max-w-full">
+      <BreadcrumbService />
 
-			<div className="overflow-x-auto border rounded-xs mt-10 mx-4" style={{ maxWidth: 'calc(97vw - 2rem)' }}>
-				<Table className="w-[100%]">
-					<TableHeader className={cn("bg-background sticky top-0 z-10", )}>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
-								{headerGroup.headers.map((header) => (
-									<TableHead
-										key={header.id}
-										className="text-xs font-semibold whitespace-nowrap px-3 py-3 border-r border-gray-200 last:border-r-0 text-left"
-										style={{
-											width: `${header.getSize()}px`,
-											minWidth: `${header.column.columnDef.minSize || 80}px`,
-											maxWidth: `${header.column.columnDef.maxSize || 300}px`
-										}}
-									>
-										{header.isPlaceholder
-											? null
-											: flexRender(
-													header.column.columnDef.header,
-													header.getContext()
-												)}
-									</TableHead>
-								))}
-							</TableRow>
-						))}
-					</TableHeader>
-					<TableBody>
-						{table.getRowModel().rows?.length ? (
-							table.getRowModel().rows.map((row) => (
-								<TableRow
-									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
-									className="hover:bg-gray-50 transition-colors"
-								>
-									{row.getVisibleCells().map((cell) => (
-										<TableCell
-											key={cell.id}
-											className="text-xs px-3 py-3 border-r border-gray-200 last:border-r-0"
-											style={{
-												width: `${cell.column.getSize()}px`,
-												minWidth: `${cell.column.columnDef.minSize || 80}px`,
-												maxWidth: `${cell.column.columnDef.maxSize || 300}px`
-											}}
-										>
-											<div className="truncate">
-												{
-													flexRender(cell.column.columnDef.cell, cell.getContext())
-												}
-											</div>
-										</TableCell>
-									))}
-								</TableRow>
-							))
-						) : (
-							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
-									No results.
-								</TableCell>
-							</TableRow>
-						)}
-					</TableBody>
-				</Table>
-			</div>
+      <h1 className="font-bold text-3xl my-5">Tabela de Serviços</h1>
+      <FieldsServices />
 
-			<FooterService />
-		</div>
-	);
-}
+      <div
+        className="overflow-x-auto border rounded-md mt-10 border-gray-300"
+        style={{ maxWidth: "calc(97vw - 2rem)" }}
+      >
+        <Table className="w-[100%]">
+          <TableHeader className={cn("bg-background sticky top-0 z-10")}>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="text-sm font-semibold whitespace-nowrap px-3 py-3 border-r  last:border-r-0 text-left border-b border-gray-300"
+                    style={{
+                      width: `${header.getSize()}px`,
+                      minWidth: `${header.column.columnDef.minSize || 80}px`,
+                      maxWidth: `${header.column.columnDef.maxSize || 300}px`,
+                    }}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="hover:bg-gray-50 transition-colors border-gray-300 even:bg-gray-50 odd:bg-white"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      className="text-sm px-3 py-3 border-r border-gray-200 last:border-r-0"
+                      style={{
+                        width: `${cell.column.getSize()}px`,
+                        minWidth: `${cell.column.columnDef.minSize || 80}px`,
+                        maxWidth: `${cell.column.columnDef.maxSize || 300}px`,
+                      }}
+                    >
+                      <div className="truncate">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </div>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+
+            {Array.from({
+              length: Math.max(0, 10 - table.getRowModel().rows.length),
+            }).map((_, rowIndex) => (
+              <TableRow
+                key={`empty-${rowIndex}`}
+                className="even:bg-gray-50 odd:bg-white border-gray-300"
+              >
+                {table.getHeaderGroups()[0].headers.map((header, colIndex) => (
+                  <TableCell
+                    key={colIndex}
+                    className="text-sm px-3 py-3 border-r border-gray-200 last:border-r-0"
+                    style={{
+                      width: `${header.getSize()}px`,
+                      minWidth: `${header.column.columnDef.minSize || 80}px`,
+                      maxWidth: `${header.column.columnDef.maxSize || 300}px`,
+                    }}
+                  >
+                    {/* placeholder vazio ou — */}
+                    <span className="text-gray-300">—</span>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <FooterService />
+    </div>
+  );
+};
 
 export default TableServices;

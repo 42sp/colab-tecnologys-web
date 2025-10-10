@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import './style.css';
+import { BotMessageSquare } from "lucide-react"
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import SimCardOutlinedIcon from '@mui/icons-material/SimCardOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -18,7 +19,7 @@ const NavButton = ({ icon, text, onClick }: NavButtonProps) => {
 			<Button
 				variant="ghost"
 				size="sm"
-				className='top-bar-button'
+				className='top-bar-button cursor-pointer'
 				onClick={onClick}
 				title={text}
 			>
@@ -58,6 +59,12 @@ const CenterButtons = () => {
 				icon={<BusinessOutlinedIcon />}
 				text="Empreendimentos"
 				onClick={() => navigate('/empreendimentos')}
+			/>
+
+			<NavButton
+				icon={<BotMessageSquare className='size-6'/>}
+				text="Chat"
+				onClick={() => navigate('/chat')}
 			/>
 		</div>
 	);

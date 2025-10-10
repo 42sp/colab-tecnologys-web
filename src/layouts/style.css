@@ -36,13 +36,13 @@
 	@apply flex
 		h-[75px]
 		border-b
-		border-gray-200
-		dark:border-gray-900
 		items-center
 		px-3
 		sm:px-5
-
 		justify-between
+		
+		/* border-gray-200
+		dark:border-gray-900 */
 
 		/* bg-background */
 

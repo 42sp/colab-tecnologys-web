@@ -81,7 +81,7 @@
 
 .login-body-Title {
 	@apply text-[#09090B]
-		font-semibold
+		font-bold
 		tracking-[-0.6px]
 		leading-[36px]
 		/* text-center */
@@ -94,7 +94,7 @@
 }
 
 .login-body-Content {
-	@apply mt-[40px]
+	@apply mt-[35px]
 	flex
 	flex-col
 	items-center;

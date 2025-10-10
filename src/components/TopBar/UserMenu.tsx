@@ -32,7 +32,7 @@ const UserMenu = (props: UserMenuProps) => {
 			<div className="top-bar-divider hidden sm:block" />
 
 			<div className="relative group">
-				<Button variant="ghost" size="icon" title="Notificações">
+				<Button variant="ghost" size="icon" title="Notificações" className='cursor-pointer'>
 					<NotificationsNoneOutlinedIcon />
 				</Button>
 			</div>
@@ -41,12 +41,12 @@ const UserMenu = (props: UserMenuProps) => {
 
 			<Menubar className="border-0 shadow-none">
 				<MenubarMenu>
-					<MenubarTrigger className=''>
+					<MenubarTrigger className='cursor-pointer'>
 						<Avatar>
 							<AvatarImage src={`https://ui-avatars.com/api/?name=${props.user?.name || 'User'}&length=2`} />
 							<AvatarFallback>CN</AvatarFallback>
 						</Avatar>
-						<span className='ml-2 hidden md:inline'>
+						<span className='ml-2 hidden md:inline '>
 							{props.user?.name}
 						</span>
 						<KeyboardArrowDownOutlinedIcon className="hidden sm:inline" />

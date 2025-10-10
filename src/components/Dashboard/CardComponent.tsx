@@ -18,10 +18,10 @@ const CardComponent = (props: CardComponentProps) => {
 				"flex-1"
 			)
 		}>
-			<Card className='flex justify-between items-center p-5 flex-row h-35'>
+			<Card className='flex justify-between items-center p-5 flex-row h-35 border-gray-300'>
 				<div>
 					<CardDescription className='grid text-wrap' >{props.title}</CardDescription>
-					<CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+					<CardTitle className="text-3xl font-bold tabular-nums @[250px]/card:text-3xl">
 						{props.value}
 					</CardTitle>
 				</div>

@@ -12,11 +12,11 @@ const Fields = () => {
 					<Search />
 				</InputGroupAddon>
 			</InputGroup>
-			<div>
-				<Button className='bg-white hover:bg-white text-black'>
+			<div className='flex gap-5'>
+				<Button className='bg-white hover:bg-white text-black border border-gray-300 cursor-pointer'>
 					<Filter /> Filtros
 				</Button>
-				<Button className='bg-black hover:bg-gray-800'>
+				<Button className='bg-black hover:bg-gray-800 cursor-pointer'>
 					<Plus /> Adicionar Empreendimento
 				</Button>
 			</div>

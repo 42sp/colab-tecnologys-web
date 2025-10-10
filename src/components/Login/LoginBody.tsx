@@ -84,7 +84,7 @@ const LoginBody = () => {
 		<div className="max-sm:flex-3 sm:flex-2">
 			{/* <ToastContainer position="top-center" hideProgressBar={true} /> */}
 			<div className="login-body-Container">
-				<h2 className="login-body-Title font-geist">Acesso ao Sistema</h2>
+				<h1 className="login-body-Title font-geist mt-2">Acesso ao Sistema</h1>
 
 				<form className="login-body-Content" onSubmit={handleSubmit}>
 					<InputGroup className='border-0 elevation-0 focus:border-0 focus:shadow-none hover:border-0 hover:shadow-none'>
@@ -109,17 +109,17 @@ const LoginBody = () => {
 							/>
 							<Label
 								htmlFor="remember-me"
-								className="login-body-rememberMeLabel"
+								className="login-body-rememberMeLabel cursor-pointer"
 							>
 								Lembrar de mim
 							</Label>
 						</div>
 					</div>
 
-					<Button type="submit" className="login-body-button" onClick={() => {navigate('/dashboard')}}>
+					<Button type="submit" className="login-body-button cursor-pointer" onClick={() => {navigate('/dashboard')}}>
 						Acessar
 					</Button>
-					<Button variant="ghost" type="submit" className="mt-5">
+					<Button variant="ghost" type="submit" className="mt-5 cursor-pointer shadow-md w-[400px]">
 						Esqueci minha senha
 					</Button>
 				</form>
@@ -127,7 +127,7 @@ const LoginBody = () => {
 					<span className="login-body-newConnectlyTitle">
 						Primeiro acesso?
 					</span>{" "}
-					<Button variant="outline" className="login-body-newConnectlyLink">
+					<Button variant="outline" className="login-body-newConnectlyLink cursor-pointer">
 						Solicitar cadastro
 					</Button>
 				</div>

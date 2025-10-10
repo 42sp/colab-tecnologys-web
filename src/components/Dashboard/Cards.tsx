@@ -15,7 +15,7 @@ const Cards = () => {
 					title='Total de Empreendimentos'
 					value="15"
 					icon={
-						<div className='flex bg-gray-100 rounded-full w-10 h-10 items-center justify-center'>
+						<div className='flex bg-gray-100 rounded-full w-11 h-11 items-center justify-center'>
 							<Building color="gray" />
 						</div>
 					}
@@ -24,7 +24,7 @@ const Cards = () => {
 					title='Em Andamento'
 					value="8"
 					icon={
-						<div className='flex bg-yellow-100 rounded-full w-10 h-10 items-center justify-center'>
+						<div className='flex bg-yellow-100 rounded-full w-11 h-11 items-center justify-center'>
 							<Calendar color="orange" />
 						</div>
 					}
@@ -33,7 +33,7 @@ const Cards = () => {
 					title='Atrasados'
 					value="2"
 					icon={
-						<div className='flex bg-red-100 rounded-full w-10 h-10 items-center justify-center'>
+						<div className='flex bg-red-100 rounded-full w-11 h-11 items-center justify-center'>
 							<ChartNoAxesColumnIcon color='red' />
 						</div>
 					}
@@ -42,7 +42,7 @@ const Cards = () => {
 					title='Concluídos'
 					value="5"
 					icon={
-						<div className='flex bg-green-100 rounded-full w-10 h-10 items-center justify-center'>
+						<div className='flex bg-green-100 rounded-full w-11 h-11 items-center justify-center'>
 							<ChartNoAxesColumnIcon color='green' className='rounded-full' />
 						</div>
 					}
