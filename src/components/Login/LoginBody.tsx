@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
-import { User, KeyRound, Loader2, Loader } from "lucide-react";
+import { User, KeyRound, Loader2 } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -35,7 +35,6 @@ const LoginBody = () => {
         success: "Login realizado com sucesso 👌",
         error: "Login ou senha incorretos 🤯",
       });
-      // Se o login for bem-sucedido, o Feathers Client armazena o token
       navigate("/dashboard");
     } catch (err: any) {
       console.error("Erro ao fazer login", err);
@@ -46,7 +45,6 @@ const LoginBody = () => {
 
   return (
     <div className="max-sm:flex-3 sm:flex-2">
-      {/* <ToastContainer position="top-center" hideProgressBar={true} /> */}
       <div className="login-body-Container">
         <h1 className="login-body-Title font-geist mt-2">Acesso ao Sistema</h1>
 

@@ -1,11 +1,12 @@
 import { feathers } from '@feathersjs/feathers';
 import rest from '@feathersjs/rest-client';
 import auth from '@feathersjs/authentication-client'; 
+import type { Service } from '@feathersjs/feathers';
 
 import type { Construction } from './types/construction.types'; 
 
 interface ServiceTypes {
-  constructions: Construction;
+  constructions: Service<Construction>; 
   // Adicione outros serviços aqui
   authentication: any; // O serviço de autenticação
 }

@@ -15,7 +15,7 @@ interface DashboardTableProps {
     constructions: Construction[]; 
 }
 
-// Função utilitária (Mock) para determinar o Status/Progresso
+// Função Mock para determinar o Status/Progresso
 const getStatusAndProgress = (construction: Construction) => {
     if (construction.name.includes("Verde")) {
         return { 
@@ -62,7 +62,7 @@ const DashboardTable = ({ constructions }: DashboardTableProps) => {
                         const { status, badgeClass, progress } = getStatusAndProgress(construction);
 
                         return (
-                            <TableRow key={construction.id}> 
+                            <TableRow key={construction.id} className='border border-gray-300'> 
                                 <TableCell className="font-medium">{construction.name}</TableCell>
                                 <TableCell className="flex items-center gap-2">
                                     <MapPin className="w-4 h-4" />
