@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'; 
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -15,7 +16,37 @@ interface CreateConstructionModalProps {
     onSuccess: (newConstruction: Construction) => void;
 }
 
+const brazilianStates = [
+    { uf: 'AC', name: 'Acre' },
+    { uf: 'AL', name: 'Alagoas' },
+    { uf: 'AP', name: 'Amapá' },
+    { uf: 'AM', name: 'Amazonas' },
+    { uf: 'BA', name: 'Bahia' },
+    { uf: 'CE', name: 'Ceará' },
+    { uf: 'DF', name: 'Distrito Federal' },
+    { uf: 'ES', name: 'Espírito Santo' },
+    { uf: 'GO', name: 'Goiás' },
+    { uf: 'MA', name: 'Maranhão' },
+    { uf: 'MT', name: 'Mato Grosso' },
+    { uf: 'MS', name: 'Mato Grosso do Sul' },
+    { uf: 'MG', name: 'Minas Gerais' },
+    { uf: 'PA', name: 'Pará' },
+    { uf: 'PB', name: 'Paraíba' },
+    { uf: 'PR', name: 'Paraná' },
+    { uf: 'PE', name: 'Pernambuco' },
+    { uf: 'PI', name: 'Piauí' },
+    { uf: 'RJ', name: 'Rio de Janeiro' },
+    { uf: 'RN', name: 'Rio Grande do Norte' },
+    { uf: 'RS', name: 'Rio Grande do Sul' },
+    { uf: 'RO', name: 'Rondônia' },
+    { uf: 'RR', name: 'Roraima' },
+    { uf: 'SC', name: 'Santa Catarina' },
+    { uf: 'SP', name: 'São Paulo' },
+    { uf: 'SE', name: 'Sergipe' },
+    { uf: 'TO', name: 'Tocantins' },
+];
 
+const stateNameToUFMap = new Map(brazilianStates.map(s => [s.name, s.uf]));
 
 
 const today = new Date().toISOString().split('T')[0];
@@ -25,13 +56,11 @@ export const constructionFormSchema = z.object({
     name: z.string().min(1, "O nome é obrigatório.").max(100, "Máximo de 100 caracteres."),
     address: z.string().min(1, "O endereço é obrigatório."),
     city: z.string().min(1, "A cidade é obrigatória.").max(50, "Máximo de 50 caracteres."),
-    state: z.string().min(1, "O estado é obrigatório.").max(2, "O estado deve ter 2 letras (UF)."),
+    state: z.string().min(1, "A seleção do estado é obrigatória."), 
 
-    
     zip_code: z.string().max(9, "Máximo de 9 caracteres.").optional(),
     description: z.string().optional(),
     
-
     start_date: z.string().date('Formato de data inválido.').optional(),
     expected_end_date: z.string().date('Formato de data inválido.').optional(),
 })
@@ -66,7 +95,7 @@ const initialFormData: FormData = {
     name: '',
     address: '',
     city: '',
-    state: '',
+    state: '', 
     zip_code: '', 
     description: '', 
     start_date: '', 
@@ -79,10 +108,25 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<z.ZodIssue[]>([]);
 
+    const getMinEndDate = () => {
+        const startDate = formData.start_date;
+        if (startDate) {
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + 1); 
+            return date.toISOString().split('T')[0];
+        }
+        return ''; 
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
         setFormData(prev => ({ ...prev, [id]: value }));
         setErrors(prev => prev.filter(err => err.path[0] !== id));
+    };
+
+    const handleStateChange = (value: string) => {
+        setFormData(prev => ({ ...prev, state: value }));
+        setErrors(prev => prev.filter(err => err.path[0] !== 'state'));
     };
 
     const handleCreate = async (e: React.FormEvent) => {
@@ -100,18 +144,24 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
 
         setIsLoading(true);
 
-        // ===============================================================
-        // 3. PREPARAÇÃO DOS DADOS PARA ENVIO (LIMPEZA DE DATAS VAZIAS)
-        // ===============================================================
-        const dataToSend = { ...validationResult.data };
+        const validatedData = validationResult.data;
+        const stateUF = stateNameToUFMap.get(validatedData.state);
 
+        if (!stateUF) {
+            toast.error("Erro interno: Sigla do estado não encontrada.");
+            setIsLoading(false);
+            return;
+        }
+        
+        const dataToSend: any = { ...validatedData, state: stateUF }; 
+        
         if (dataToSend.start_date === '') {
             delete dataToSend.start_date;
         }
         if (dataToSend.expected_end_date === '') {
             delete dataToSend.expected_end_date;
         }
-
+        
         logger.info("CONSTRUCTION_MODAL", "Tentando criar empreendimento com dados validados:", dataToSend);
 
         try {
@@ -158,21 +208,12 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
                 </DialogHeader>
                 <form onSubmit={handleCreate}>
                     <div className="grid gap-4 py-4">
-                        {/* ---------------------------------- */}
-                        {/* 1. CAMPOS OBRIGATÓRIOS (com feedback de erro) */}
-                        {/* ---------------------------------- */}
+                        {/* 1. CAMPOS OBRIGATÓRIOS (name, address, city) */}
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="name" className="text-right">Nome</Label>
-                            <Input 
-                                id="name" 
-                                value={formData.name} 
-                                onChange={handleChange} 
-                                className={`col-span-3 ${isError('name') ? 'border-red-500' : ''}`}
-                            />
+                            <Input id="name" value={formData.name} onChange={handleChange} className={`col-span-3 ${isError('name') ? 'border-red-500' : ''}`} />
                             {isError('name') && <p className="col-span-4 text-xs text-red-500 text-right">{getError('name')}</p>}
                         </div>
-                        
-                        {/* ... Repita a estrutura de Label/Input/Erro para address, city, state ... */}
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="address" className="text-right">Endereço</Label>
                             <Input id="address" value={formData.address} onChange={handleChange} className={`col-span-3 ${isError('address') ? 'border-red-500' : ''}`} />
@@ -183,15 +224,25 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
                             <Input id="city" value={formData.city} onChange={handleChange} className={`col-span-3 ${isError('city') ? 'border-red-500' : ''}`} />
                             {isError('city') && <p className="col-span-4 text-xs text-red-500 text-right">{getError('city')}</p>}
                         </div>
+                    
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="state" className="text-right">Estado</Label>
-                            <Input id="state" value={formData.state} onChange={handleChange} className={`col-span-3 ${isError('state') ? 'border-red-500' : ''}`} />
+                            <Select onValueChange={handleStateChange} value={formData.state}>
+                                <SelectTrigger id="state" className={`col-span-3 ${isError('state') ? 'border-red-500' : ''}`}>
+                                    <SelectValue placeholder="Selecione o Estado" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {brazilianStates.map((state) => (
+                                        
+                                        <SelectItem key={state.uf} value={state.name}>
+                                            {state.name} ({state.uf})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             {isError('state') && <p className="col-span-4 text-xs text-red-500 text-right">{getError('state')}</p>}
                         </div>
 
-                        {/* ---------------------------------- */}
-                        {/* 2. CAMPOS OPCIONAIS (Datas com checagem lógica) */}
-                        {/* ---------------------------------- */}
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="start_date" className="text-right">Data de Início</Label>
                             <Input 
@@ -211,14 +262,13 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
                                 type="date" 
                                 value={formData.expected_end_date} 
                                 onChange={handleChange} 
+                                min={getMinEndDate()} 
+                                disabled={!formData.start_date}
                                 className={`col-span-3 ${isError('expected_end_date') ? 'border-red-500' : ''}`}
                             />
                             {isError('expected_end_date') && <p className="col-span-4 text-xs text-red-500 text-right">{getError('expected_end_date')}</p>}
                         </div>
 
-                        {/* ---------------------------------- */}
-                        {/* 3. OUTROS OPCIONAIS */}
-                        {/* ---------------------------------- */}
                         <div className="grid grid-cols-4 items-center gap-4">
                             <Label htmlFor="zip_code" className="text-right">CEP</Label>
                             <Input id="zip_code" value={formData.zip_code || ''} onChange={handleChange} className="col-span-3" />

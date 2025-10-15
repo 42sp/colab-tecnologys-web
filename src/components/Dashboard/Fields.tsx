@@ -32,7 +32,7 @@ const Fields: React.FC<FieldsProps> = ({ onCreationSuccess }) => {
                 {/* 🎯 Botão de Abrir Modal */}
                 <Button 
                     className='bg-black hover:bg-gray-800 cursor-pointer'
-                    onClick={() => setIsModalOpen(true)} // Abre o modal
+                    onClick={() => setIsModalOpen(true)}
                 >
                     <Plus /> Adicionar Empreendimento
                 </Button>

@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Um componente simples para representar o bloco de um Card
 const CardSkeleton: React.FC = () => (
     <div className="bg-white p-6 rounded-lg shadow-md h-32 animate-pulse border border-gray-100">
         {/* Título do Card */}
@@ -10,7 +9,7 @@ const CardSkeleton: React.FC = () => (
     </div>
 );
 
-// Um componente simples para representar uma linha da Tabela
+
 const TableRowSkeleton: React.FC = () => (
     <div className="flex items-center space-x-4 py-3 border-b border-gray-100 animate-pulse">
         {/* Coluna 1: Nome/Título */}

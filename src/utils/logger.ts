@@ -7,31 +7,24 @@ const isTagAllowed = (tag: string): boolean => {
 };
 
 const isInfoEnabled = (tag: string): boolean => {
-    // 1. Permite em produção se a flag de força estiver ativa
     if (FORCE_LOG_IN_PROD) return true;
 
-    // 2. Bloqueia em Produção
     if (!IS_DEV_MODE) return false;
 
-    // 3. Em Dev, verifica a lista de permissão (exceto se 'ALL' estiver ativo)
     return isTagAllowed(tag);
 };
 
 const isWarnEnabled = (tag: string): boolean => {
-    // 1. Permite em DEV (não depende das tags para WARN)
     if (IS_DEV_MODE) return true;
 
-    // 2. Permite em PROD se a flag de força OU a tag for de "sempre ativo"
     if (FORCE_LOG_IN_PROD || ALWAYS_ENABLED_TAGS.includes(tag)) return true;
 
     return false;
 };
 
 const isErrorEnabled = (tag: string): boolean => {
-    // 1. Permite em DEV
     if (IS_DEV_MODE) return true;
 
-    // 2. Permite em PROD se a flag de força OU a tag for de "sempre ativo"
     if (FORCE_LOG_IN_PROD || ALWAYS_ENABLED_TAGS.includes(tag)) return true;
     
     return false;
@@ -55,7 +48,7 @@ const logger = {
     },
 
     warn: (tag: string, message: string, data?: any) => {
-        if (!isWarnEnabled(tag)) return; // 💡 Nova verificação
+        if (!isWarnEnabled(tag)) return;
 
         console.warn(
             `%c${LOG_PREFIX}%c [WARN] ${tag}: ${message}`, 
@@ -66,7 +59,7 @@ const logger = {
     },
 
     error: (tag: string, message: string, error?: any) => {
-        if (!isErrorEnabled(tag)) return; // 💡 Nova verificação
+        if (!isErrorEnabled(tag)) return;
         
         console.error(
             `%c${LOG_PREFIX}%c [ERROR] ${tag}: ${message}`, 
