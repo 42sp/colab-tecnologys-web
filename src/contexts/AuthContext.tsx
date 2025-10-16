@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import client from "../feathers";
-import logger from '@/utils/logger';
+//import { useLogger } from "@/components/Logger/useLogger";
 import { useNavigate } from "react-router-dom";
 
 interface User {
@@ -27,32 +27,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const navigate = useNavigate();
+  //const logger = useLogger();
 
   // Tentar reautenticar ao carregar a página (se houver token no storage)
   useEffect(() => {
-        logger.info("AUTH", "Iniciando reautenticação.");
+        //logger.info("AUTH", "Iniciando reautenticação.");
 
         client.reAuthenticate()
             .then((response: any) => {
                 const loggedInUser = response.user as User;
                 setIsAuthenticated(true);
                 setUser(loggedInUser);
-                logger.info("AUTH", "Reautenticação bem-sucedida. Usuário:", loggedInUser);
+                //logger.info("AUTH", "Reautenticação bem-sucedida. Usuário:", loggedInUser);
             })
             .catch((err) => {
                 setIsAuthenticated(false);
                 setUser(null);
-                logger.warn("AUTH", "Nenhum token válido encontrado ou reautenticação falhou.", err);
+                //logger.warn("AUTH", "Nenhum token válido encontrado ou reautenticação falhou.", err);
             })
             .finally(() => {
                 setIsLoadingAuth(false);
-                logger.info("AUTH", "Processo de autenticação inicial concluído.");
+                //logger.info("AUTH", "Processo de autenticação inicial concluído.");
             });
     }, []);
 
-  // Função de Login que interage com o Backend
   const login = async (cpf: string, password: string, rememberMe: boolean): Promise<void> => {
-        logger.info("AUTH", `Tentando login para CPF: ${cpf}`);
+        //logger.info("AUTH", `Tentando login para CPF: ${cpf}`);
         try {
             const response: any = await client.authenticate({
                 strategy: "local",
@@ -63,9 +63,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             const loggedInUser = response.user as User;
             setIsAuthenticated(true);
             setUser(loggedInUser);
-            logger.info("AUTH", "Login realizado com sucesso. Usuário:", loggedInUser);
+            //logger.info("AUTH", "Login realizado com sucesso. Usuário:", loggedInUser);
         } catch (err) {
-            logger.error("AUTH", "Erro na tentativa de login.", err);
+            //logger.error("AUTH", "Erro na tentativa de login.", err);
             throw err;
         }
     };

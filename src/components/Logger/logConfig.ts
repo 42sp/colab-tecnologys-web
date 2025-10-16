@@ -7,13 +7,13 @@ export const ENABLED_TAGS: (string | 'ALL')[] = [
     //'AUTH',
     
     // Hooks
-    //'CONSTRUCTION',
+    'CONSTRUCTION_HOOK',
     
     // Pages
     //'DASHBOARD',
 
     // Components
-    'CONSTRUCTION_MODAL',
+    //'CONSTRUCTION_MODAL',
 
 ];
 

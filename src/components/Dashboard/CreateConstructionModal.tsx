@@ -6,7 +6,7 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { toast } from 'react-toastify';
 import client from '@/feathers';
-import logger from '@/utils/logger';
+//import { useLogger } from "@/components/Logger/useLogger";
 import type { Construction } from '@/types/construction.types';
 import { z } from 'zod';
 
@@ -107,6 +107,7 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
     const [formData, setFormData] = useState<FormData>(initialFormData);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState<z.ZodIssue[]>([]);
+    //const logger = useLogger();
 
     const getMinEndDate = () => {
         const startDate = formData.start_date;
@@ -137,7 +138,7 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
 
         if (!validationResult.success) {
             setErrors(validationResult.error.errors);
-            logger.warn("VALIDATION_FRONTEND", "Falha na validação do formulário.", validationResult.error.errors);
+            //logger.warn("VALIDATION_FRONTEND", "Falha na validação do formulário.", validationResult.error.errors);
             toast.warn("Por favor, preencha todos os campos obrigatórios e verifique as datas.");
             return;
         }
@@ -162,7 +163,7 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
             delete dataToSend.expected_end_date;
         }
         
-        logger.info("CONSTRUCTION_MODAL", "Tentando criar empreendimento com dados validados:", dataToSend);
+        //logger.info("CONSTRUCTION_MODAL", "Tentando criar empreendimento com dados validados:", dataToSend);
 
         try {
             const result: Construction = await client.service('constructions').create(dataToSend);
@@ -180,7 +181,7 @@ const CreateConstructionModal: React.FC<CreateConstructionModalProps> = ({ isOpe
         } catch (error: any) {
             
             const errorDetails = error.message || 'Erro de rede desconhecido.';
-            logger.error("API:ERROR", `Erro ao criar empreendimento no backend: ${errorDetails}`, error); 
+            //logger.error("API:ERROR", `Erro ao criar empreendimento no backend: ${errorDetails}`, error); 
             
             const validationErrors = error.errors ? JSON.stringify(error.errors, null, 2) : '';
             const userMessage = validationErrors 

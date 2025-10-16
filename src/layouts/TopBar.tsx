@@ -3,7 +3,7 @@ import './style.css';
 import CenterButtons from '@/components/TopBar/CenterButtons';
 import UserMenu from '@/components/TopBar/UserMenu';
 import TitleSide from '@/components/TopBar/TitleSide';
-import { useTheme } from '@/hook/useTheme';
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/utils';
 
 interface TopBarProps {
