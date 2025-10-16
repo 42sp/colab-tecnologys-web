@@ -4,10 +4,11 @@ import auth from '@feathersjs/authentication-client';
 import type { Service } from '@feathersjs/feathers';
 
 import type { Construction } from './types/construction.types'; 
+import type { Employee } from './types/employee.types';
 
 interface ServiceTypes {
   constructions: Service<Construction>; 
-  // Adicione outros serviços aqui
+  profile: Service<Employee>;
   authentication: any; // O serviço de autenticação
 }
 

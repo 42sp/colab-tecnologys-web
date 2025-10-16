@@ -1,7 +1,7 @@
 // import './style.css';
 
 import FieldsEmployee from "@/components/Employee/FieldsEmployee";
-import TableEmployee from "@/components/Employee/TableEmployee";
+import TableEmployee from "@/components/Employee/TableEmployees";
 
 const Employee = () => {
 	return (

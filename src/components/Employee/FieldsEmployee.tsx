@@ -1,4 +1,4 @@
-import { ChevronDown, Filter, RefreshCw, Search } from 'lucide-react';
+import { ChevronDown, Filter, RefreshCw, Search, Plus } from 'lucide-react';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '../ui/input-group';
 import './style.css';
 import { Button } from '../ui/button';
@@ -22,7 +22,7 @@ const FieldsEmployee = () => {
 				<Button className='cursor-pointer' variant='outline'><Filter /></Button>
 				<Button className='cursor-pointer' variant='outline'><RefreshCw /></Button>
 			</div>
-			<Button className='py-5 cursor-pointer'>Adicionar Funcionário</Button>
+			<Button className='py-5 cursor-pointer'><Plus className='w-4 h-4'/> Adicionar Funcionário</Button>
 		</div>
 	);
 }

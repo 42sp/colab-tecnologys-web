@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { constructionService } from "@/services/constructionService";
-
 import type { Construction } from "@/types/construction.types";
+import type { ReactNode } from "react";
 
 interface Filters {
   search?: string;
@@ -27,18 +27,17 @@ interface ConstructionsContextType {
 
 const ConstructionsContext = createContext<ConstructionsContextType | null>(null);
 
-export function ConstructionsProvider({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+export function ConstructionsProvider({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoadingAuth } = useAuth();
   const [constructions, setConstructions] = useState<Construction[]>([]);
   const [filters, setFilters] = useState<Filters>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
   const fetchConstructions = useCallback(async () => {
     if (!isAuthenticated) return;
 
-    if (!hasLoadedOnce) setIsLoading(true);
+    setIsLoading(true);
     setError(null);
 
     const query: any = {};
@@ -53,14 +52,15 @@ export function ConstructionsProvider({ children }: { children: React.ReactNode 
       setError((err as any)?.message || "Falha ao carregar construções");
     } finally {
       setIsLoading(false);
-      setHasLoadedOnce(true);
     }
-  }, [filters, isAuthenticated, hasLoadedOnce]);
+  }, [filters, isAuthenticated]);
 
-
+  // Só executa após autenticação estar pronta e usuário logado
   useEffect(() => {
-    fetchConstructions();
-  }, [fetchConstructions]);
+    if (!isLoadingAuth && isAuthenticated) {
+      fetchConstructions();
+    }
+  }, [isLoadingAuth, isAuthenticated, fetchConstructions]);
 
   const total = constructions.length;
   const inProgress = constructions.filter(c => c.status === "Em Andamento").length;
