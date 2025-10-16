@@ -1,4 +1,3 @@
-// src/pages/Enterprises/EnterpriseLayout.tsx
 import { NavLink, Outlet } from "react-router-dom";
 import Breadcrumb from "@/components/Services/BreadcrumbService";
 
@@ -22,6 +21,18 @@ export default function EnterpriseLayout() {
           }
         >
           Informações Gerais
+        </NavLink>
+
+        <NavLink
+          to="servicos"
+          end
+          className={({ isActive }) =>
+            isActive
+              ? "border-b-2 border-black pb-2 bg-white rounded-xs pt-1 px-2 font-semibold"
+              : "text-gray-500 pb-2 hover:text-black font-semibold pt-1 px-2"
+          }
+        >
+          Serviços
         </NavLink>
 
         <NavLink

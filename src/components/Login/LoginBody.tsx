@@ -1,139 +1,130 @@
-import { useEffect, useState } from 'react';
-import './style.css';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../ui/button';
-import { Label } from '../ui/label';
-import { Checkbox } from '../ui/checkbox';
-import { User, KeyRound } from 'lucide-react';
-// import { Password } from '@mui/icons-material';
-import { InputGroup, InputGroupAddon, InputGroupInput } from '../ui/input-group';
+import { useState } from "react";
+import "./style.css";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { Checkbox } from "../ui/checkbox";
+import { User, KeyRound, Loader2 } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "../ui/input-group";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
 
 const LoginBody = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [rememberMe, setRememberMe] = useState(false);
-	const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const { login } = useAuth();
 
-	// const { login } = useAuth();
-	// const $service = useServices();
-	// const navigate = useNavigate();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-	useEffect(() => {
-		const loginStorage = localStorage.getItem("login");
-		if (loginStorage) {
-			const { email, password, rememberMe } = JSON.parse(loginStorage);
-			setEmail(email);
-			setPassword(password);
-			setRememberMe(rememberMe);
-		}
-	}, []);
+    const loginId = cpf;
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
+    try {
+      await toast.promise(login(loginId, password, rememberMe), {
+        pending: "Fazendo login...",
+        success: "Login realizado com sucesso 👌",
+        error: "Login ou senha incorretos 🤯",
+      });
+      navigate("/dashboard");
+    } catch (err: any) {
+      console.error("Erro ao fazer login", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-		try {
-			console.log({
-				email,
-				password,
-				rememberMe
-			})
-			// const response = await toast.promise(
-			// 	$service.postAuthentication({
-			// 		email,
-			// 		password,
-			// 		strategy: "local",
-			// 	}),
-			// 	{
-			// 		pending: "Fazendo login...",
-			// 		success: "Login realizado com sucesso 👌",
-			// 		error: "Login ou senha incorretos 🤯",
-			// 	}
-			// );
+  return (
+    <div className="max-sm:flex-3 sm:flex-2">
+      <div className="login-body-Container">
+        <h1 className="login-body-Title font-geist mt-2">Acesso ao Sistema</h1>
 
-			// if ([200, 201].includes(response.status)) {
-			// 	const responseData = response.data as {
-			// 		accessToken: string;
-			// 		user: { id: number; email: string; name?: string };
-			// 	};
+        <form className="login-body-Content" onSubmit={handleSubmit}>
+          <InputGroup className="border-0 elevation-0 focus:border-0 focus:shadow-none hover:border-0 hover:shadow-none">
+            <InputGroupInput
+              id="cpf"
+              placeholder="CPF"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              autoComplete="username"
+            />
+            <InputGroupAddon>
+              <Label htmlFor="cpf">
+                <User />
+              </Label>
+            </InputGroupAddon>
+          </InputGroup>
+          <InputGroup className="mt-5 border-0 elevation-0 focus:border-0 focus:shadow-none hover:border-0 hover:shadow-none">
+            <InputGroupInput
+              type="password"
+              id="password"
+              placeholder="Senha"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+            <InputGroupAddon>
+              <Label htmlFor="password">
+                <KeyRound />
+              </Label>
+            </InputGroupAddon>
+          </InputGroup>
 
-			// 	const accessToken = responseData.accessToken;
-			// 	const user = responseData.user;
-
-			// 	sessionStorage.setItem("accessToken", accessToken);
-			// 	await login(accessToken, user);
-
-			// 	// Persistência do login caso o usuário marque "Remember me"
-			// 	if (rememberMe) {
-			// 		localStorage.setItem(
-			// 			"login",
-			// 			JSON.stringify({ email, password, rememberMe })
-			// 		);
-			// 	} else {
-			// 		localStorage.removeItem("login");
-			// 	}
-
-			// 	navigate("/home");
-			// }
-		} catch (err) {
-			console.error("Erro ao fazer login", err);
-		}
-	};
-
-	return (
-		<div className="max-sm:flex-3 sm:flex-2">
-			{/* <ToastContainer position="top-center" hideProgressBar={true} /> */}
-			<div className="login-body-Container">
-				<h1 className="login-body-Title font-geist mt-2">Acesso ao Sistema</h1>
-
-				<form className="login-body-Content" onSubmit={handleSubmit}>
-					<InputGroup className='border-0 elevation-0 focus:border-0 focus:shadow-none hover:border-0 hover:shadow-none'>
-						<InputGroupInput id="email" placeholder="Usuário ou E-mail" />
-						<InputGroupAddon>
-							<Label htmlFor="email"><User /></Label>
-						</InputGroupAddon>
-					</InputGroup>
-					<InputGroup className='mt-5 border-0 elevation-0 focus:border-0 focus:shadow-none hover:border-0 hover:shadow-none'>
-						<InputGroupInput type='password' id="password" placeholder="Senha" />
-						<InputGroupAddon>
-							<Label htmlFor="password"><KeyRound /></Label>
-						</InputGroupAddon>
-					</InputGroup>
-
-					<div className="login-body-rememberMeContainer">
-						<div className="login-body-rememberMeCheckboxContainer">
-							<Checkbox
-								id="remember-me"
-								checked={rememberMe}
-								onCheckedChange={(checked: boolean)=> setRememberMe(!!checked)}
-							/>
-							<Label
-								htmlFor="remember-me"
-								className="login-body-rememberMeLabel cursor-pointer"
-							>
-								Lembrar de mim
-							</Label>
-						</div>
-					</div>
-
-					<Button type="submit" className="login-body-button cursor-pointer" onClick={() => {navigate('/dashboard')}}>
-						Acessar
-					</Button>
-					<Button variant="ghost" type="submit" className="mt-5 cursor-pointer shadow-md w-[400px]">
-						Esqueci minha senha
-					</Button>
-				</form>
-				<div className="login-body-newConnectlyContainer">
-					<span className="login-body-newConnectlyTitle">
-						Primeiro acesso?
-					</span>{" "}
-					<Button variant="outline" className="login-body-newConnectlyLink cursor-pointer">
-						Solicitar cadastro
-					</Button>
-				</div>
-			</div>
-		</div>
-	);
+          <div className="login-body-rememberMeContainer">
+            <div className="login-body-rememberMeCheckboxContainer">
+              <Checkbox
+                id="remember-me"
+                checked={rememberMe}
+                onCheckedChange={(checked: boolean) => setRememberMe(!!checked)}
+              />
+              <Label
+                htmlFor="remember-me"
+                className="login-body-rememberMeLabel cursor-pointer"
+              >
+                Lembrar de mim
+              </Label>
+            </div>
+          </div>
+          <Button
+            type="submit"
+            className="login-body-button cursor-pointer"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Acessar"
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            type="button"
+            className="mt-5 cursor-pointer shadow-md w-[400px]"
+          >
+            Esqueci minha senha
+          </Button>
+        </form>
+        <div className="login-body-newConnectlyContainer">
+          <span className="login-body-newConnectlyTitle">Primeiro acesso?</span>{" "}
+          <Button
+            variant="outline"
+            className="login-body-newConnectlyLink cursor-pointer"
+          >
+            Solicitar cadastro
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default LoginBody;

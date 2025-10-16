@@ -1,7 +1,7 @@
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
-import { useTheme } from '@/hook/useTheme'
+import { useTheme } from '@/hooks/useTheme'
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme()

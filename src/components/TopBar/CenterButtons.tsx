@@ -45,11 +45,13 @@ const CenterButtons = () => {
 				text="Dashboard"
 				onClick={() => navigate('/dashboard')}
 			/>
-			<NavButton
+
+			{/* <NavButton
 				icon={<SimCardOutlinedIcon />}
 				text="Serviços"
 				onClick={() => navigate('/servicos')}
-			/>
+			/> */}
+
 			<NavButton
 				icon={<PersonOutlineOutlinedIcon />}
 				text="Funcionários"
