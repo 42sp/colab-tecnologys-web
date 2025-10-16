@@ -1,6 +1,6 @@
 import type { Paginated, Service } from '@feathersjs/feathers'
 
-export type ConstructionStatus = "Em Andamento" | "Atrasado" | "Concluído";
+
 
 export interface Construction {
     id: string;
@@ -16,7 +16,7 @@ export interface Construction {
     created_at?: string; 
     updated_at?: string; 
     idx?: number;
-    status?: ConstructionStatus;
+    finished_at?: string;
 }
 
 export interface ConstructionService extends Service<Construction> {} 
