@@ -1,26 +1,43 @@
 import { feathers } from '@feathersjs/feathers';
 import rest from '@feathersjs/rest-client';
-import auth from '@feathersjs/authentication-client'; 
+import auth from '@feathersjs/authentication-client';
 import type { Service } from '@feathersjs/feathers';
 
-import type { Construction } from './types/construction.types'; 
+import type { Construction } from './types/construction.types';
 import type { Employee } from './types/employee.types';
+import type { User } from './types/user.types';
 
 interface ServiceTypes {
-  constructions: Service<Construction>; 
+  constructions: Service<Construction>;
   profile: Service<Employee>;
-  authentication: any; // O serviço de autenticação
+  users: Service<User>;
+  employees: Service<Employee>;
+  authentication: any;
 }
 
+// 🔹 Criação do cliente principal
 const client = feathers<ServiceTypes>();
-const restClient = rest('http://localhost:3030'); 
 
+// 🔹 Configuração da conexão REST
+const restClient = rest('http://localhost:3030');
 client.configure(restClient.fetch((...args) => window.fetch(...args)));
 
-// 🎯 NOVO: Configura o cliente de autenticação
-// O armazenamento (storage) padrão é o localStorage, o que atende ao "Lembrar de mim"
-client.configure(auth({
-    storage: window.localStorage, // Define onde o token será armazenado
-}));
+// 🔹 Autenticação com armazenamento local (para “lembrar de mim”)
+client.configure(
+  auth({
+    storage: window.localStorage,
+  })
+);
+
+// 🧠 Reautenticação automática ao carregar o app
+(async () => {
+  try {
+    await client.reAuthenticate();
+    console.info('[Feathers] Reautenticado com sucesso ✅');
+  } catch (error: any) {
+    console.warn('[Feathers] Token inválido ou expirado. Limpando sessão.');
+    window.localStorage.removeItem('feathers-jwt');
+  }
+})();
 
 export default client;

@@ -1,41 +1,52 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { employeeService } from "@/services/employeeService";
 import type { Employee } from "@/types/employee.types";
 import type { ReactNode } from "react";
 
-interface EmployeesContextValue {
-  employees: Employee[];
-  loading: boolean;
-  error: string | null;
-  refresh: () => void;
+interface Filters {
+  search?: string;
+  role?: string;
 }
 
-const EmployeesContext = createContext<EmployeesContextValue | undefined>(undefined);
+interface EmployeesContextType {
+  employees: Employee[];
+  isLoading: boolean;
+  error: string | null;
+  refetch: () => Promise<void>;
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
+}
 
-export const EmployeesProvider = ({ children }: { children: ReactNode }) => {
+const EmployeesContext = createContext<EmployeesContextType | null>(null);
+
+export function EmployeesProvider({ children }: { children: ReactNode }) {
   const { isAuthenticated, isLoadingAuth } = useAuth();
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<Filters>({});
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchEmployees = useCallback(async () => {
     if (!isAuthenticated) return;
 
-    setLoading(true);
+    setIsLoading(true);
     setError(null);
 
+    const query: Record<string, any> = {};
+    if (filters.search) query.name = `%${filters.search}%`;
+    if (filters.role) query.role_id = filters.role;
+
     try {
-      const data = await employeeService.find();
+      const data = await employeeService.find(query);
       setEmployees(data);
     } catch (err) {
       setError((err as any)?.message || "Falha ao carregar funcionários");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  }, [isAuthenticated]);
+  }, [filters, isAuthenticated]);
 
-  // Só executa após autenticação estar pronta e usuário logado
   useEffect(() => {
     if (!isLoadingAuth && isAuthenticated) {
       fetchEmployees();
@@ -43,14 +54,23 @@ export const EmployeesProvider = ({ children }: { children: ReactNode }) => {
   }, [isLoadingAuth, isAuthenticated, fetchEmployees]);
 
   return (
-    <EmployeesContext.Provider value={{ employees, loading, error, refresh: fetchEmployees }}>
+    <EmployeesContext.Provider
+      value={{
+        employees,
+        isLoading,
+        error,
+        refetch: fetchEmployees,
+        filters,
+        setFilters,
+      }}
+    >
       {children}
     </EmployeesContext.Provider>
   );
-};
+}
 
-export const useEmployeesContext = (): EmployeesContextValue => {
-  const context = useContext(EmployeesContext);
-  if (!context) throw new Error("useEmployeesContext deve ser usado dentro de EmployeesProvider");
-  return context;
-};
+export function useEmployeesContext() {
+  const ctx = useContext(EmployeesContext);
+  if (!ctx) throw new Error("useEmployeesContext deve ser usado dentro de EmployeesProvider");
+  return ctx;
+}
