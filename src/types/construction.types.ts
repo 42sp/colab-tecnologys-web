@@ -9,8 +9,8 @@ export interface Construction {
     city: string;
     state: string;
     zip_code?: string;
-    start_date?: string; 
-    expected_end_date?: string; 
+    start_date?: string | null; 
+    expected_end_date?: string | null; 
     description?: string;
     is_active?: boolean;
     created_at?: string; 

@@ -10,6 +10,7 @@ import { useConstructionsContext } from '@/contexts/ConstructionsContext';
 import { constructionService } from '@/services/constructionService';
 import type { Construction } from '@/types/construction.types';
 import { useState } from 'react';
+import EditConstructionModal from './EditConstructionModal';
 
 const getStatusFromDates = (construction: Construction) => {
   const now = new Date();
@@ -27,6 +28,7 @@ const DashboardTable: React.FC = () => {
   const { theme } = useTheme();
   const { constructions, refetch } = useConstructionsContext();
   const [updating, setUpdating] = useState<string | null>(null);
+  const [editingConstruction, setEditingConstruction] = useState<Construction | null>(null);
 
   const handleMarkAsFinished = async (constructionId: string) => {
     setUpdating(constructionId);
@@ -38,6 +40,14 @@ const DashboardTable: React.FC = () => {
     } finally {
       setUpdating(null);
     }
+  };
+
+  const handleEdit = (construction: Construction) => {
+      setEditingConstruction(construction);
+  };
+
+  const handleCloseEditModal = () => {
+      setEditingConstruction(null);
   };
 
   const calculateDeadlineProgress = (construction: Construction) => {
@@ -115,7 +125,7 @@ const DashboardTable: React.FC = () => {
 
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
+                          <Button onClick={() => handleEdit(construction)} className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
                             <Pencil color={theme === 'dark' ? 'white' : 'black'} />
                           </Button>
                         </TooltipTrigger>
@@ -146,6 +156,11 @@ const DashboardTable: React.FC = () => {
       {constructions.length === 0 && (
         <div className='p-5 text-center text-gray-500'>Nenhum empreendimento encontrado.</div>
       )}
+
+      <EditConstructionModal 
+          construction={editingConstruction}
+          onClose={handleCloseEditModal}
+      />
     </div>
   );
 };
