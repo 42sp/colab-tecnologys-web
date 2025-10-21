@@ -1,19 +1,18 @@
 export interface User {
-    id: string; // format: 'uuid'
+    id: string; 
     cpf: string;
-    name?: string; // Não é required no schema principal
-    email?: string; // Não é required no schema principal
-    phone?: string; // Não é required no schema principal
+    name?: string; 
+    email?: string; 
+    phone?: string; 
     roleId?: string;
-    password?: string; // Presente no schema, mas resolvido/removido em hooks
-    profile_id?: string; // format: 'uuid'
+    password?: string; 
+    profile_id?: string; 
     is_active?: boolean;
     is_available?: boolean;
-    created_at?: string; // format: 'date-time'
-    updated_at?: string; // format: 'date-time'
+    created_at?: string;
+    updated_at?: string;
 }
 
-// O tipo de dados que é enviado para a criação (contém a senha)
 export interface UserData extends User {
     cpf: string;
     password: string;

@@ -24,7 +24,7 @@ const TableRowSkeleton: React.FC = () => (
 const DashboardSkeleton: React.FC = () => {
     return (
         <div className="px-20 py-8 space-y-10">
-            {/* 1. Cards Skeleton */}
+            {/*  Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <CardSkeleton />
                 <CardSkeleton />
@@ -32,7 +32,7 @@ const DashboardSkeleton: React.FC = () => {
                 <CardSkeleton />
             </div>
 
-            {/* 2. Fields/Filtros Skeleton */}
+            {/* Fields/Filtros Skeleton */}
             <div className="bg-white p-4 rounded-lg shadow-md animate-pulse space-y-4">
                 <div className="flex space-x-4">
                     <div className="h-10 bg-gray-100 rounded w-48"></div> {/* Input 1 */}
@@ -41,7 +41,7 @@ const DashboardSkeleton: React.FC = () => {
                 </div>
             </div>
 
-            {/* 3. Dashboard Table Skeleton */}
+            {/* Dashboard Table Skeleton */}
             <div className="bg-white p-6 rounded-lg shadow-md">
                 {/* Cabeçalho da Tabela */}
                 <div className="h-6 bg-gray-200 rounded w-1/3 mb-6 animate-pulse"></div>

@@ -5,18 +5,8 @@ import DashboardSkeleton from "@/components/Dashboard/DashboardSkeleton";
 import { motion } from 'framer-motion'; 
 import { useConstructionsContext } from "@/contexts/ConstructionsContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { containerVariants, itemVariants } from '@/utils/framer-variants';
 //import logger from '../utils/logger';
-
-const containerVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { delayChildren: 0.1, staggerChildren: 0.05 }
-  }
-};
-
-const itemVariants = { hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } };
 
 const Dashboard = () => {
   const { isAuthenticated, isLoadingAuth } = useAuth();
