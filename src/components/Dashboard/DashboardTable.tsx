@@ -21,7 +21,7 @@ const getStatusFromDates = (construction: Construction) => {
   if (end && end < now) return { status: 'Atrasado', badgeClass: 'bg-red-100 text-red-800 text-base' };
   if (start && start <= now && end && end >= now) return { status: 'Em andamento', badgeClass: 'bg-yellow-100 text-yellow-800 text-base' };
 
-  return { status: 'Pendente', badgeClass: 'bg-gray-100 text-gray-800' };
+  return { status: 'Agendada', badgeClass: 'bg-blue-100 text-blue-800 text-base' };
 };
 
 const DashboardTable: React.FC = () => {

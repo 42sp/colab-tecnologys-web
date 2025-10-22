@@ -17,12 +17,14 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Eye, Pencil } from "lucide-react";
 import { useState } from "react";
 import ViewEmployeeModal from "./ViewEmployeeModal";
+import EditEmployeeModal from "./EditEmployeeModal";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+
 
 // Tipo base da linha da tabela
 type EmployeeRow = {
@@ -62,13 +64,23 @@ const getRoleName = (role_id: string) => roleMap[role_id] ?? "—";
 
 //  Tabela principal
 const TableEmployees = () => {
-  const { employees, isLoading } = useEmployeesContext();
-  const [viewingEmployeeId, setViewingEmployeeId] = useState<string | null>(
-    null
-  );
+  const { employees, isLoading, refetch } = useEmployeesContext();
+  const [viewingEmployeeId, setViewingEmployeeId] = useState<string | null>(null);
+  const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(null);
 
   const handleView = (employeeId: string) => {
     setViewingEmployeeId(employeeId);
+  };
+
+  const handleEdit = (employeeId: string) => {
+    setEditingEmployeeId(employeeId);
+  };
+
+  const handleEditClose = (edited = false) => {
+    setEditingEmployeeId(null);
+    if (edited) {
+        refetch(); 
+    }
   };
 
   const columns: ColumnDef<EmployeeRow>[] = [
@@ -114,6 +126,7 @@ const TableEmployees = () => {
                   variant="outline"
                   size="icon"
                   className="bg-transparent hover:bg-transparent border border-gray-300 w-[32px] h-[32px] cursor-pointer"
+                  onClick={() => handleEdit(row.original.id)}
                 >
                   <Pencil className="h-4 w-4 text-gray-700" />
                 </Button>
@@ -215,6 +228,11 @@ const TableEmployees = () => {
       <ViewEmployeeModal
         employeeId={viewingEmployeeId}
         onClose={() => setViewingEmployeeId(null)}
+      />
+
+      <EditEmployeeModal
+        employeeId={editingEmployeeId}
+        onClose={handleEditClose} 
       />
     </>
   );

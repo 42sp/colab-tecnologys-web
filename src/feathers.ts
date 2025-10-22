@@ -11,7 +11,7 @@ interface ServiceTypes {
   constructions: Service<Construction>;
   profile: Service<Employee>;
   users: Service<User>;
-  employees: Service<Employee>;
+  employee: Service<Employee>;
   authentication: any;
 }
 

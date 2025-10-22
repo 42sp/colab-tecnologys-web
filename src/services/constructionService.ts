@@ -14,7 +14,7 @@ export const constructionService = {
 
     if ("data" in result && Array.isArray(result.data)) {
       return result.data;
-    }
+    }''
 
     return result as Construction[];
   },

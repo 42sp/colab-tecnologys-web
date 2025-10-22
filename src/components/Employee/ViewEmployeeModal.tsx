@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 import { employeeService } from "@/services/employeeService";
@@ -77,9 +77,12 @@ const ViewEmployeeModal: React.FC<ViewEmployeeModalProps> = ({ employeeId, onClo
         <Dialog open={isOpen} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-[550px] p-6">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">
+                    <DialogTitle aria-describedby={undefined} className="text-2xl font-bold">
                         {isLoading ? "Carregando..." : fullEmployee?.name || "Detalhes do Funcionário"}
                     </DialogTitle>
+                     <DialogDescription>
+                        Visualize informações completas do funcionário selecionado.
+                    </DialogDescription>
                 </DialogHeader>
 
                 {isLoading && (
@@ -131,7 +134,7 @@ const ViewEmployeeModal: React.FC<ViewEmployeeModalProps> = ({ employeeId, onClo
     );
 };
 
-// Componente auxiliar flexível
+
 interface FieldProps {
     label: string;
     value: string ;
