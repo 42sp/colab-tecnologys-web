@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { constructionService } from "@/services/constructionService";
-
 import type { Construction } from "@/types/construction.types";
+import type { ReactNode } from "react";
 
 interface Filters {
   search?: string;
@@ -10,14 +10,16 @@ interface Filters {
   status?: string;
 }
 
+interface CardData {
+  total: number;
+  inProgress: number;
+  delayed: number;
+  completed: number;
+}
+
 interface ConstructionsContextType {
   constructions: Construction[];
-  cardData: {
-    total: number;
-    inProgress: number;
-    delayed: number;
-    completed: number;
-  };
+  cardData: CardData;
   isLoading: boolean;
   error: string | null;
   refetch: () => Promise<void>;
@@ -27,8 +29,8 @@ interface ConstructionsContextType {
 
 const ConstructionsContext = createContext<ConstructionsContextType | null>(null);
 
-export function ConstructionsProvider({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth();
+export function ConstructionsProvider({ children }: { children: ReactNode }) {
+  const { isAuthenticated, isLoadingAuth } = useAuth();
   const [constructions, setConstructions] = useState<Construction[]>([]);
   const [filters, setFilters] = useState<Filters>({});
   const [isLoading, setIsLoading] = useState(true);
@@ -57,15 +59,29 @@ export function ConstructionsProvider({ children }: { children: React.ReactNode 
     }
   }, [filters, isAuthenticated, hasLoadedOnce]);
 
-
   useEffect(() => {
-    fetchConstructions();
-  }, [fetchConstructions]);
+    if (!isLoadingAuth && isAuthenticated) {
+      fetchConstructions();
+    }
+  }, [isLoadingAuth, isAuthenticated, fetchConstructions]);
 
+  // Calcula os cards dinamicamente
+  const now = new Date();
+  const inProgress = constructions.filter(c => {
+    if (c.finished_at) return false;
+    const start = c.start_date ? new Date(c.start_date) : null;
+    const end = c.expected_end_date ? new Date(c.expected_end_date) : null;
+    return start && start <= now && end && end >= now;
+  }).length;
+
+  const delayed = constructions.filter(c => {
+    if (c.finished_at) return false;
+    const end = c.expected_end_date ? new Date(c.expected_end_date) : null;
+    return end && end < now;
+  }).length;
+
+  const completed = constructions.filter(c => !!c.finished_at).length;
   const total = constructions.length;
-  const inProgress = constructions.filter(c => c.status === "Em Andamento").length;
-  const delayed = constructions.filter(c => c.status === "Atrasado").length;
-  const completed = constructions.filter(c => c.status === "Concluído").length;
 
   return (
     <ConstructionsContext.Provider value={{

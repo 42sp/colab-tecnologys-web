@@ -1,6 +1,6 @@
 import client from "@/feathers";
-import type { Construction, ConstructionPaginatedResult } from "@/types/construction.types";
 import type { Service } from "@feathersjs/feathers";
+import type { Construction, ConstructionPaginatedResult } from "@/types/construction.types";
 
 type ConstructionService = Service<Construction> & {
   find: (params?: any) => Promise<ConstructionPaginatedResult | Construction[]>;
@@ -14,7 +14,7 @@ export const constructionService = {
 
     if ("data" in result && Array.isArray(result.data)) {
       return result.data;
-    }
+    }''
 
     return result as Construction[];
   },
