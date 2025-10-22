@@ -287,9 +287,7 @@ const TableServices = () => {
 
   return (
     <div className="w-full max-w-full">
-      <BreadcrumbService />
-
-      <h1 className="font-bold text-3xl my-5">Tabela de Serviços</h1>
+      {/* <h1 className="font-bold text-3xl my-5">Tabela de Serviços</h1> */}
       <FieldsServices />
 
       <div
