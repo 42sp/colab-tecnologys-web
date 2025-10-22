@@ -7,7 +7,7 @@ import { containerVariants, itemVariants } from '@/utils/framer-variants';
 
 const Employee = () => {
 
-    const { isLoading } = useEmployeesContext();
+    const { isFirstLoading  } = useEmployeesContext();
 
     // const renderContent = (isSkeleton: boolean) => (
     //     <>
@@ -32,13 +32,13 @@ const Employee = () => {
             </p>
 
             <motion.div 
-                key={isLoading ? "skeleton" : "content"}
+                key={isFirstLoading  ? "skeleton" : "content"}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
                 className="space-y-4" 
             >
-                {isLoading ? (
+                {isFirstLoading  ? (
                     // Se estiver carregando, renderize o Skeleton
                     <EmployeesPageSkeleton />
                 ) : (

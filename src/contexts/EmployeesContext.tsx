@@ -12,6 +12,7 @@ interface Filters {
 interface EmployeesContextType {
   employees: Employee[];
   isLoading: boolean;
+  isFirstLoading: boolean;
   error: string | null;
   refetch: () => Promise<void>;
   filters: Filters;
@@ -25,10 +26,15 @@ export function EmployeesProvider({ children }: { children: ReactNode }) {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filters, setFilters] = useState<Filters>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchEmployees = useCallback(async () => {
     if (!isAuthenticated) return;
+
+    // Mostra skeleton apenas na primeira vez
+    if (isFirstLoading) setIsLoading(true);
+    setError(null);
 
     setIsLoading(true);
     setError(null);
@@ -44,6 +50,7 @@ export function EmployeesProvider({ children }: { children: ReactNode }) {
       setError((err as any)?.message || "Falha ao carregar funcionários");
     } finally {
       setIsLoading(false);
+      if (isFirstLoading) setIsFirstLoading(false);
     }
   }, [filters, isAuthenticated]);
 
@@ -58,6 +65,7 @@ export function EmployeesProvider({ children }: { children: ReactNode }) {
       value={{
         employees,
         isLoading,
+        isFirstLoading,
         error,
         refetch: fetchEmployees,
         filters,
