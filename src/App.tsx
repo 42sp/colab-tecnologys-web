@@ -6,7 +6,7 @@ import Employee from "./pages/Employee";
 import Services from "./pages/Services";
 import Chat from "./pages/Chat";
 import UserRegistration from "@/pages/UserRegistration";
-
+import EnterprisesPage from "./pages/Enterprises.tsx";
 import GeneralInfo from "@/components/Enterprises/GeneralInfo";
 import FloorsAndQuantities from "@/components/Enterprises/FloorsAndQuantities";
 import Documents from "@/components/Enterprises/Documents";
@@ -65,11 +65,20 @@ function App() {
                     path="/empreendimentos/"
                     element={
                       <ProtecteRoute>
+                        <EnterprisesPage />
+                      </ProtecteRoute>
+                    }
+                  />
+
+                  <Route
+                    path="/empreendimentos/:id"
+                    element={
+                      <ProtecteRoute>
                         <EnterpriseLayout />
                       </ProtecteRoute>
                     }
                   >
-                    <Route index element={<GeneralInfo />} />
+                    <Route path="info" element={<GeneralInfo />} />
                     <Route path="servicos" element={<Services />} />
                     <Route path="andares" element={<FloorsAndQuantities />} />
                     <Route path="documentos" element={<Documents />} />
