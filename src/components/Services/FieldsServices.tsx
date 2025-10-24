@@ -15,7 +15,7 @@ import { useParams } from 'react-router-dom';
 import Papa from 'papaparse'; 
 import { toast } from 'react-toastify'; 
 import type { Services } from '@/types/services.types';
-import { serviceService } from '@/services/serviceService';
+import { servicesService } from '@/services/servicesService';
 
 type CsvData = Record<string, string>;
 
@@ -135,7 +135,7 @@ const FieldsServices = () => {
           console.table(mappedData);
           console.log("Dados Completos Mapeados (para inspeção detalhada):", mappedData);
           
-          const response = await serviceService.importBulk(mappedData);
+          const response = await servicesService.importBulk(mappedData);
           
           toast.success(`🎉 Sucesso! ${response.importedCount} serviços importados e validados.`);
           console.log(`SUCCESS: Importação concluída. ${response.importedCount} registros criados.`, response);

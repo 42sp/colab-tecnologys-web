@@ -62,7 +62,7 @@ const getStatusDisplay = (construction?: Construction | null) => {
 
 
 export default function GeneralInfo() {
-  const { id } = useParams<{ id: string }>();
+  const { workId } = useParams<{ workId: string }>();
   const [construction, setConstruction] = useState<Construction | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,13 +82,13 @@ export default function GeneralInfo() {
   }, []);
 
   useEffect(() => {
-    if (id) {
-      fetchConstruction(id);
+    if (workId) {
+      fetchConstruction(workId);
     } else {
       setIsLoading(false);
       setError("ID do empreendimento não fornecido na URL.");
     }
-  }, [id, fetchConstruction]);
+  }, [workId, fetchConstruction]);
 
   const statusDisplay = getStatusDisplay(construction);
   // Simulação de progresso total, pois a API Construction não fornece o progresso (%) diretamente

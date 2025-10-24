@@ -17,6 +17,7 @@ import { LogProvider } from "./components/Logger/LogContext";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ConstructionsProvider } from "./contexts/ConstructionsContext.tsx";
 import { EmployeesProvider } from "./contexts/EmployeesContext.tsx";
+import { ServicesProvider } from "./contexts/ServicesContext.tsx";
 import { ToastContainer } from "react-toastify";
 
 function App() {
@@ -39,69 +40,78 @@ function App() {
           <LogProvider>
             <EmployeesProvider>
               <ConstructionsProvider>
-                <LogToggleButton />
-                <Routes>
-                  <Route path="/" element={<Login />} />
 
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtecteRoute>
-                        <Dashboard />
-                      </ProtecteRoute>
-                    }
-                  />
+                  <LogToggleButton />
+                  <Routes>
+                    <Route path="/" element={<Login />} />
 
-                  <Route
-                    path="/funcionarios"
-                    element={
-                      <ProtecteRoute>
-                        <Employee />
-                      </ProtecteRoute>
-                    }
-                  />
+                    <Route
+                      path="/dashboard"
+                      element={
+                        <ProtecteRoute>
+                          <Dashboard />
+                        </ProtecteRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/empreendimentos/"
-                    element={
-                      <ProtecteRoute>
-                        <EnterprisesPage />
-                      </ProtecteRoute>
-                    }
-                  />
+                    <Route
+                      path="/funcionarios"
+                      element={
+                        <ProtecteRoute>
+                          <Employee />
+                        </ProtecteRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/empreendimentos/:id"
-                    element={
-                      <ProtecteRoute>
-                        <EnterpriseLayout />
-                      </ProtecteRoute>
-                    }
-                  >
-                    <Route path="info" element={<GeneralInfo />} />
-                    <Route path="servicos" element={<Services />} />
-                    <Route path="andares" element={<FloorsAndQuantities />} />
-                    <Route path="documentos" element={<Documents />} />
-                    <Route path="historico" element={<History />} />
-                  </Route>
+                    <Route
+                      path="/empreendimentos/"
+                      element={
+                        <ProtecteRoute>
+                          <EnterprisesPage />
+                        </ProtecteRoute>
+                      }
+                    />
 
-                  <Route
-                    path="/cadastro-usuario"
-                    element={
-                      <ProtecteRoute>
-                        <UserRegistration />
-                      </ProtecteRoute>
-                    }
-                  />
-                  <Route
-                    path="/chat"
-                    element={
-                      <ProtecteRoute>
-                        <Chat />
-                      </ProtecteRoute>
-                    }
-                  />
-                </Routes>
+                    <Route
+                      path="/empreendimentos/:workId"
+                      element={
+                        <ProtecteRoute>
+                          
+                          <EnterpriseLayout />
+                          
+                        </ProtecteRoute>
+                      }
+                    >
+                      <Route path="info" element={<GeneralInfo />} />
+                      <Route path="servicos" element={
+                          <ServicesProvider>
+                          <Services />
+                          </ServicesProvider>
+                      }
+                      />
+                      <Route path="andares" element={<FloorsAndQuantities />} />
+                      <Route path="documentos" element={<Documents />} />
+                      <Route path="historico" element={<History />} />
+                    </Route>
+
+                    <Route
+                      path="/cadastro-usuario"
+                      element={
+                        <ProtecteRoute>
+                          <UserRegistration />
+                        </ProtecteRoute>
+                      }
+                    />
+                    <Route
+                      path="/chat"
+                      element={
+                        <ProtecteRoute>
+                          <Chat />
+                        </ProtecteRoute>
+                      }
+                    />
+                  </Routes>
+
               </ConstructionsProvider>
             </EmployeesProvider>
           </LogProvider>

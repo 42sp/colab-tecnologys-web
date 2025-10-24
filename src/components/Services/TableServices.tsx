@@ -1,5 +1,8 @@
+// src/components/TableServices/TableServices.tsx
+
 import "./style.css";
 import FieldsServices from "./FieldsServices";
+import { useEffect, useState } from "react";
 
 import type { ColumnDef } from "@tanstack/react-table";
 import {
@@ -8,199 +11,95 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+// Type que define as colunas de EXIBIÇÃO da Tabela
 export type Services = {
-  idServico: string;
+  id: string; // ID do Serviço (M-2637259)
   torre: string;
-  nPav: string;
-  pav: string;
+  pav: string; // Andar/Floor
   apartamento: string;
-  classificacao: string;
-  servico: string;
-  servicoEmContrato: string;
-  parecerDesvio: string;
+  unidadeMedida: string; // measurement_unit
+  parede: string; // stage/wall
   espessura: string;
-  quantMco: number;
-  quantMat: number;
-  quantFunc: number;
-  bonus: string;
-  unidadeMedida: string;
-  unidadeMaterial: string;
-  ativo: boolean;
-  dataRealizacaoServico: string;
-  dataLancamento: string;
-  porcentagem: number;
-  tarifario: string;
-  codigoMatricula: string;
+  marcacao: number; // labor_quantity onde service_description é 'Marcação'
+  fixacao: number; // labor_quantity onde service_description é 'Fixação'
+  elevacao: number; // labor_quantity onde service_description é 'Elevação'
+  quantMat: number; // material_quantity
+  quantMod: number; // worker_quantity (QTO MOD = Quantidade Modelo/Mão de Obra)
 };
 
+// Nova definição de colunas, focada nos campos de medição solicitados
 export const columns: ColumnDef<Services>[] = [
   {
-    accessorKey: "idServico",
-    header: "ID SERVIÇO",
+    accessorKey: "id",
+    header: "ID",
     size: 100,
     minSize: 80,
-    maxSize: 120,
   },
   {
     accessorKey: "torre",
     header: "TORRE",
     size: 80,
     minSize: 60,
-    maxSize: 100,
-  },
-  {
-    accessorKey: "nPav",
-    header: "Nº PAV",
-    size: 80,
-    minSize: 60,
-    maxSize: 100,
   },
   {
     accessorKey: "pav",
     header: "PAV",
     size: 70,
     minSize: 50,
-    maxSize: 90,
   },
   {
     accessorKey: "apartamento",
-    header: "APARTAMENTO",
+    header: "APTO",
     size: 120,
     minSize: 90,
-    maxSize: 150,
   },
   {
-    accessorKey: "classificacao",
-    header: "CLASSIFICAÇÃO",
+    accessorKey: "unidadeMedida",
+    header: "UNIDADE DE MEDIÇÃO",
     size: 130,
-    minSize: 100,
-    maxSize: 160,
+    minSize: 110,
   },
   {
-    accessorKey: "servico",
-    header: "SERVIÇO",
-    size: 150,
-    minSize: 120,
-    maxSize: 200,
-  },
-  {
-    accessorKey: "servicoEmContrato",
-    header: "SERVIÇO EM CONTRATO",
-    size: 160,
-    minSize: 140,
-    maxSize: 200,
-  },
-  {
-    accessorKey: "parecerDesvio",
-    header: "PARECER/DESVIO",
-    size: 140,
-    minSize: 120,
-    maxSize: 180,
+    accessorKey: "parede",
+    header: "PAREDE",
+    size: 100,
+    minSize: 80,
   },
   {
     accessorKey: "espessura",
     header: "ESPESSURA",
     size: 100,
     minSize: 80,
-    maxSize: 120,
   },
   {
-    accessorKey: "quantMco",
-    header: "Quant MCO",
+    accessorKey: "marcacao",
+    header: "MARCAÇÃO (M)",
     size: 100,
     minSize: 80,
-    maxSize: 120,
+  },
+  {
+    accessorKey: "fixacao",
+    header: "FIXAÇÃO (M)",
+    size: 100,
+    minSize: 80,
+  },
+  {
+    accessorKey: "elevacao",
+    header: "ELEVAÇÃO (M²)",
+    size: 110,
+    minSize: 90,
   },
   {
     accessorKey: "quantMat",
-    header: "Quant MAT",
+    header: "QTO MAT (m²)",
     size: 100,
     minSize: 80,
-    maxSize: 120,
   },
   {
-    accessorKey: "quantFunc",
-    header: "Quant FUNC",
-    size: 110,
-    minSize: 90,
-    maxSize: 130,
-  },
-  {
-    accessorKey: "bonus",
-    header: "BÔNUS",
-    size: 80,
-    minSize: 60,
-    maxSize: 100,
-  },
-  {
-    accessorKey: "unidadeMedida",
-    header: "UNIDADE MEDIDA",
-    size: 130,
-    minSize: 110,
-    maxSize: 160,
-  },
-  {
-    accessorKey: "unidadeMaterial",
-    header: "UNIDADE MATERIAL",
-    size: 140,
-    minSize: 120,
-    maxSize: 170,
-  },
-  {
-    accessorKey: "ativo",
-    header: "ATIVO",
-    size: 80,
-    minSize: 60,
-    maxSize: 100,
-    cell: ({ row }) => (
-      <span
-        className={`px-2 py-1 rounded text-sm whitespace-nowrap inline-block ${
-          row.getValue("ativo")
-            ? "bg-green-100 text-green-800"
-            : "bg-red-100 text-red-800"
-        }`}
-      >
-        {row.getValue("ativo") ? "Sim" : "Não"}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "dataRealizacaoServico",
-    header: "DATA REALIZAÇÃO SERVIÇO",
-    size: 180,
-    minSize: 160,
-    maxSize: 220,
-  },
-  {
-    accessorKey: "dataLancamento",
-    header: "DATA LANÇAMENTO",
-    size: 140,
-    minSize: 120,
-    maxSize: 170,
-  },
-  {
-    accessorKey: "porcentagem",
-    header: "PORCENTAGEM",
-    size: 120,
-    minSize: 100,
-    maxSize: 140,
-    cell: ({ row }) => (
-      <span className="whitespace-nowrap">{row.getValue("porcentagem")}%</span>
-    ),
-  },
-  {
-    accessorKey: "tarifario",
-    header: "TARIFÁRIO",
+    accessorKey: "quantMod",
+    header: "QTO MOD (m²)",
     size: 100,
     minSize: 80,
-    maxSize: 120,
-  },
-  {
-    accessorKey: "codigoMatricula",
-    header: "CÓDIGO MATRÍCULA",
-    size: 140,
-    minSize: 120,
-    maxSize: 170,
   },
 ];
 
@@ -214,66 +113,15 @@ import {
 } from "@/components/ui/table";
 import FooterService from "./FooterService";
 import { cn } from "@/lib/utils";
+import { useServices } from "@/contexts/ServicesContext";
 
-function getData(): Services[] {
-  return [
-    {
-      idServico: "SRV001",
-      torre: "T1",
-      nPav: "5",
-      pav: "1º",
-      apartamento: "101",
-      classificacao: "A",
-      servico: "Instalação Elétrica",
-      servicoEmContrato: "Sim",
-      parecerDesvio: "Aprovado",
-      espessura: "10mm",
-      quantMco: 5,
-      quantMat: 10,
-      quantFunc: 2,
-      bonus: "10%",
-      unidadeMedida: "m²",
-      unidadeMaterial: "kg",
-      ativo: true,
-      dataRealizacaoServico: "2024-01-15",
-      dataLancamento: "2024-01-10",
-      porcentagem: 85,
-      tarifario: "T001",
-      codigoMatricula: "MAT123",
-    },
-    {
-      idServico: "SRV002",
-      torre: "T2",
-      nPav: "8",
-      pav: "2º",
-      apartamento: "202",
-      classificacao: "B",
-      servico: "Pintura",
-      servicoEmContrato: "Não",
-      parecerDesvio: "Pendente",
-      espessura: "5mm",
-      quantMco: 3,
-      quantMat: 8,
-      quantFunc: 1,
-      bonus: "5%",
-      unidadeMedida: "m²",
-      unidadeMaterial: "L",
-      ativo: true,
-      dataRealizacaoServico: "2024-01-20",
-      dataLancamento: "2024-01-18",
-      porcentagem: 92,
-      tarifario: "T002",
-      codigoMatricula: "MAT456",
-    },
-    // ...
-  ];
-}
 
 const TableServices = () => {
-  const data = getData();
+  // Pega os dados do contexto
+  const { data, isLoading, error } = useServices(); 
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",
@@ -283,10 +131,17 @@ const TableServices = () => {
       maxSize: 300,
     },
   });
+  
+  if (isLoading) {
+    return <div className="p-10 text-center text-xl font-medium">Carregando serviços... ⏳</div>;
+  }
+
+  if (error) {
+    return <div className="p-10 text-center text-red-600 font-medium">Erro ao carregar dados: {error} ❌</div>;
+  }
 
   return (
     <div className="w-full max-w-full">
-      {/* <h1 className="font-bold text-3xl my-5">Tabela de Serviços</h1> */}
       <FieldsServices />
 
       <div
@@ -300,7 +155,7 @@ const TableServices = () => {
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="text-sm font-semibold whitespace-nowrap px-3 py-3 border-r  last:border-r-0 text-left border-b border-gray-300"
+                    className="text-sm font-semibold whitespace-nowrap px-3 py-3 border-r  last:border-r-0 text-left border-b border-gray-300"
                     style={{
                       width: `${header.getSize()}px`,
                       minWidth: `${header.column.columnDef.minSize || 80}px`,
@@ -352,11 +207,12 @@ const TableServices = () => {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Nenhum serviço encontrado para esta construção.
                 </TableCell>
               </TableRow>
             )}
-
+            
+            {/* Preenchimento de linhas vazias */}
             {Array.from({
               length: Math.max(0, 10 - table.getRowModel().rows.length),
             }).map((_, rowIndex) => (
@@ -374,7 +230,6 @@ const TableServices = () => {
                       maxWidth: `${header.column.columnDef.maxSize || 300}px`,
                     }}
                   >
-                    {/* placeholder vazio ou — */}
                     <span className="text-gray-300">—</span>
                   </TableCell>
                 ))}

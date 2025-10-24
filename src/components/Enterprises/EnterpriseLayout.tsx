@@ -7,20 +7,20 @@ import { constructionService } from "@/services/constructionService"; // Service
 import { Loader2 } from "lucide-react";
 
 export default function EnterpriseLayout() {
-  const { id } = useParams<{ id: string }>();
+  const { workId } = useParams<{ workId: string }>();
   const [constructionName, setConstructionName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Efeito para buscar o nome da construção
   useEffect(() => {
-    if (id) {
+    if (workId) {
       const fetchName = async () => {
         setIsLoading(true);
         setError(null);
         try {
           // Busca apenas a informação essencial (o ideal seria ter um endpoint /constructions/:id/name)
-          const data = await constructionService.get(id); 
+          const data = await constructionService.get(workId); 
           setConstructionName(data.name);
         } catch (err) {
           console.error("Erro ao buscar o nome da construção:", err);
@@ -32,9 +32,9 @@ export default function EnterpriseLayout() {
       };
       fetchName();
     }
-  }, [id]);
+  }, [workId]);
 
-  if (!id) {
+  if (!workId) {
     // Se não há ID na rota (o que não deve acontecer se a navegação estiver correta)
     return <div className="p-8 text-center text-red-500">Erro: ID do empreendimento ausente.</div>;
   }
@@ -64,9 +64,9 @@ export default function EnterpriseLayout() {
       <div className="flex justify-center gap-6 border-b border-t border-gray-300 mb-2 bg-gray-200 w-full">
         {/* Informações Gerais (Rota index ou /info) */}
         <NavLink
-          to={`/empreendimentos/${id}/info`}
+          to={`/empreendimentos/${workId}/info`}
           className={({ isActive, isPending }) =>
-            (isActive || location.pathname === `/empreendimentos/${id}`) 
+            (isActive || location.pathname === `/empreendimentos/${workId}`) 
               ? "border-b-2 border-black pb-2 bg-white rounded-xs pt-1 px-2 font-semibold"
               : "text-gray-500 pb-2 hover:text-black font-semibold pt-1 px-2"
           }

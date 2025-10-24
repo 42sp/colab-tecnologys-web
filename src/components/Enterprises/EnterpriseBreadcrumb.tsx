@@ -25,24 +25,24 @@ interface EnterpriseBreadcrumbProps {
 }
 
 export function EnterpriseBreadcrumb({ constructionName, isLoading }: EnterpriseBreadcrumbProps) {
-    const { id } = useParams<{ id: string }>();
+    const { workId } = useParams<{ workId: string }>();
     const location = useLocation();
 
     const subPageKey = useMemo(() => {
         const pathSegments = location.pathname.split('/').filter(segment => segment);
         
-        if (pathSegments.length === 2 && pathSegments[1] === id) {
+        if (pathSegments.length === 2 && pathSegments[1] === workId) {
             return 'info';
         }
         
         return pathSegments[2] || 'info'; 
-    }, [location.pathname, id]);
+    }, [location.pathname, workId]);
 
     const subPageTitle = routeNames[subPageKey] || 'Detalhes';
     
-    const enterpriseBaseUrl = `/empreendimentos/${id}/info`;
+    const enterpriseBaseUrl = `/empreendimentos/${workId}/info`;
 
-    if (!id) {
+    if (!workId) {
         return (
             <Breadcrumb>
                 <BreadcrumbList>
