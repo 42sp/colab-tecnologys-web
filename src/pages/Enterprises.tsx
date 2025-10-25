@@ -33,15 +33,16 @@ function ConstructionsList() {
     { label: "Concluídas", value: cardData.completed, icon: "✅", color: "bg-green-600" },
   ];
 
-  if (isLoading && constructions.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-48">
-        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
-        <span className="ml-2 text-gray-600">Carregando empreendimentos...</span>
-      </div>
-    );
-  }
-
+  if (isLoading) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen w-full">
+      <Loader2 className="w-10 h-10 animate-spin text-gray-600" />
+      <span className="mt-4 text-gray-600 text-lg">
+        Carregando empreendimentos...
+      </span>
+    </div>
+  );
+}
   if (error) {
     return (
       <div className="text-center p-8 bg-red-50 border border-red-200 rounded-lg">
@@ -54,8 +55,8 @@ function ConstructionsList() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-3xl font-bold text-gray-900">Empreendimentos</h1>
-        <p className="text-gray-500">Gerencie e acesse os detalhes de todas as construções.</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Empreendimentos</h1>
+        <p className="text-gray-500 mb-2">Gerencie e acesse os detalhes de todas as construções.</p>
       </header>
       
       {/* Cards de Resumo */}

@@ -21,7 +21,7 @@ type CsvData = Record<string, string>;
 
 
 const FieldsServices = () => {
-  const { id: constructionId } = useParams<{ id: string }>();
+  const { workId: constructionId } = useParams<{ workId: string }>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
 

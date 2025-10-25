@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import type { Services as TableServiceData } from "@/components/Services/TableServices";
+import type { Services as TableServiceData } from "@/components/Services/TableColumns";
 import { useGetServices } from "@/hooks/useGetService";
 
 // 1. Definição do Tipo do Contexto

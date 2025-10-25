@@ -61,7 +61,7 @@ export default function EnterpriseLayout() {
         </h1>
       </div>
 
-      <div className="flex justify-center gap-6 border-b border-t border-gray-300 mb-2 bg-gray-200 w-full">
+      <div className="flex justify-center gap-6 border-b border-t border-gray-300  bg-gray-200 w-full">
         {/* Informações Gerais (Rota index ou /info) */}
         <NavLink
           to={`/empreendimentos/${workId}/info`}

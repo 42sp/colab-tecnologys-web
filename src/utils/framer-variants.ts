@@ -15,6 +15,22 @@ export const containerVariants: Variants = {
 
 // Configuração para itens individuais dentro do container (Cards, Fields, Tabela)
 export const itemVariants: Variants = { 
-    hidden: { opacity: 0, y: 10 }, 
+    hidden: { opacity: 0, y: 10,}, 
     visible: { opacity: 1, y: 0 } 
+};
+
+export const tableRowFadeInVariants: Variants = {
+    hidden: { 
+        opacity: 0,
+        // O uso de escala no eixo X não afeta o layout vertical, mas adiciona um efeito sutil
+        scaleX: 0.98
+    },
+    visible: { 
+        opacity: 1, 
+        scaleX: 1,
+        transition: { 
+            duration: 0.4, 
+            ease: "easeOut" 
+        } 
+    }
 };

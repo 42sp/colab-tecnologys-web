@@ -1,111 +1,19 @@
 // src/components/TableServices/TableServices.tsx
 
 import "./style.css";
-import FieldsServices from "./FieldsServices";
-import { useEffect, useState } from "react";
-
-import type { ColumnDef } from "@tanstack/react-table";
+import { Loader2 } from 'lucide-react'
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { motion } from "framer-motion"; 
+import { containerVariants, itemVariants, tableRowFadeInVariants } from "@/utils/framer-variants"; 
 
-// Type que define as colunas de EXIBIÇÃO da Tabela
-export type Services = {
-  id: string; // ID do Serviço (M-2637259)
-  torre: string;
-  pav: string; // Andar/Floor
-  apartamento: string;
-  unidadeMedida: string; // measurement_unit
-  parede: string; // stage/wall
-  espessura: string;
-  marcacao: number; // labor_quantity onde service_description é 'Marcação'
-  fixacao: number; // labor_quantity onde service_description é 'Fixação'
-  elevacao: number; // labor_quantity onde service_description é 'Elevação'
-  quantMat: number; // material_quantity
-  quantMod: number; // worker_quantity (QTO MOD = Quantidade Modelo/Mão de Obra)
-};
-
-// Nova definição de colunas, focada nos campos de medição solicitados
-export const columns: ColumnDef<Services>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "torre",
-    header: "TORRE",
-    size: 80,
-    minSize: 60,
-  },
-  {
-    accessorKey: "pav",
-    header: "PAV",
-    size: 70,
-    minSize: 50,
-  },
-  {
-    accessorKey: "apartamento",
-    header: "APTO",
-    size: 120,
-    minSize: 90,
-  },
-  {
-    accessorKey: "unidadeMedida",
-    header: "UNIDADE DE MEDIÇÃO",
-    size: 130,
-    minSize: 110,
-  },
-  {
-    accessorKey: "parede",
-    header: "PAREDE",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "espessura",
-    header: "ESPESSURA",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "marcacao",
-    header: "MARCAÇÃO (M)",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "fixacao",
-    header: "FIXAÇÃO (M)",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "elevacao",
-    header: "ELEVAÇÃO (M²)",
-    size: 110,
-    minSize: 90,
-  },
-  {
-    accessorKey: "quantMat",
-    header: "QTO MAT (m²)",
-    size: 100,
-    minSize: 80,
-  },
-  {
-    accessorKey: "quantMod",
-    header: "QTO MOD (m²)",
-    size: 100,
-    minSize: 80,
-  },
-];
+import { columns } from "./TableColumns";
 
 import {
   Table,
-  TableBody,
   TableCell,
   TableHead,
   TableHeader,
@@ -115,9 +23,11 @@ import FooterService from "./FooterService";
 import { cn } from "@/lib/utils";
 import { useServices } from "@/contexts/ServicesContext";
 
+// 🌟 Criação de componentes motion para os elementos da tabela
+const MotionTbody = motion.tbody;
+const MotionTr = motion.tr;
 
 const TableServices = () => {
-  // Pega os dados do contexto
   const { data, isLoading, error } = useServices(); 
 
   const table = useReactTable({
@@ -133,7 +43,14 @@ const TableServices = () => {
   });
   
   if (isLoading) {
-    return <div className="p-10 text-center text-xl font-medium">Carregando serviços... ⏳</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+        <span className="ml-2 text-gray-600">
+          Carregando serviços do empreendimento...
+        </span>
+      </div>
+    );
   }
 
   if (error) {
@@ -141,16 +58,14 @@ const TableServices = () => {
   }
 
   return (
-    <div className="w-full max-w-full">
-      <FieldsServices />
-
+    <div className="w-full max-w-full mr-4">
       <div
         className="overflow-x-auto border rounded-md mt-10 border-gray-300"
-        style={{ maxWidth: "calc(97vw - 2rem)" }}
-      >
+        style={{ overflowY: 'auto', scrollbarGutter: 'stable' }}>
         <Table className="w-[100%]">
           <TableHeader className={cn("bg-background sticky top-0 z-10")}>
             {table.getHeaderGroups().map((headerGroup) => (
+              // Não animamos o cabeçalho
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
@@ -173,11 +88,19 @@ const TableServices = () => {
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody>
+          
+          {/* 🌟 1. Animação aplicada no corpo da tabela */}
+          <MotionTbody
+            variants={containerVariants} // Usamos containerVariants para o stagger
+            initial="hidden"
+            animate="visible"
+          >
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
+                // 🌟 2. Animação aplicada em cada linha de dados
+                <MotionTr
                   key={row.id}
+                  variants={tableRowFadeInVariants} // Usamos itemVariants para a animação individual
                   data-state={row.getIsSelected() && "selected"}
                   className="hover:bg-gray-50 transition-colors border-gray-300 even:bg-gray-50 odd:bg-white"
                 >
@@ -199,7 +122,7 @@ const TableServices = () => {
                       </div>
                     </TableCell>
                   ))}
-                </TableRow>
+                </MotionTr>
               ))
             ) : (
               <TableRow>
@@ -212,7 +135,7 @@ const TableServices = () => {
               </TableRow>
             )}
             
-            {/* Preenchimento de linhas vazias */}
+            {/* Preenchimento de linhas vazias - Não animamos essas linhas */}
             {Array.from({
               length: Math.max(0, 10 - table.getRowModel().rows.length),
             }).map((_, rowIndex) => (
@@ -235,7 +158,7 @@ const TableServices = () => {
                 ))}
               </TableRow>
             ))}
-          </TableBody>
+          </MotionTbody>
         </Table>
       </div>
 

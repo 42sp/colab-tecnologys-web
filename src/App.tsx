@@ -3,7 +3,7 @@ import ProtecteRoute from "./components/ProtecteRoute";
 import Login from "@/pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Employee from "./pages/Employee";
-import Services from "./pages/Services";
+import Services from "./components/Services/Services.tsx";
 import Chat from "./pages/Chat";
 import UserRegistration from "@/pages/UserRegistration";
 import EnterprisesPage from "./pages/Enterprises.tsx";

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { Services as TableServiceData } from "../components/Services/TableServices";
+import type { Services as TableServiceData } from "../components/Services/TableColumns";
 import { servicesService } from "@/services/servicesService"; 
 import { useAuth } from "@/contexts/AuthContext"; 
 

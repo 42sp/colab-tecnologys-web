@@ -8,9 +8,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 import { useTheme } from '@/hooks/useTheme';
 import { useConstructionsContext } from '@/contexts/ConstructionsContext';
 import { constructionService } from '@/services/constructionService';
-import type { Construction } from '@/types/construction.types';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import EditConstructionModal from './EditConstructionModal';
+import type { Construction } from '@/types/construction.types';
 
 const getStatusFromDates = (construction: Construction) => {
   const now = new Date();
@@ -22,6 +23,19 @@ const getStatusFromDates = (construction: Construction) => {
   if (start && start <= now && end && end >= now) return { status: 'Em andamento', badgeClass: 'bg-yellow-100 text-yellow-800 text-base' };
 
   return { status: 'Agendada', badgeClass: 'bg-blue-100 text-blue-800 text-base' };
+};
+
+const getProgressColor = (status: string) => {
+  switch (status) {
+    case 'Em andamento':
+      return 'bg-yellow-400';
+    case 'Atrasado':
+      return 'bg-red-500';
+    case 'Concluído':
+      return 'bg-green-500';
+    default:
+      return 'bg-gray-500';
+  }
 };
 
 const DashboardTable: React.FC = () => {
@@ -49,6 +63,12 @@ const DashboardTable: React.FC = () => {
   const handleCloseEditModal = () => {
       setEditingConstruction(null);
   };
+
+  const navigate = useNavigate();
+
+  const handleView = (constructionId: string) => {
+    navigate(`/empreendimentos/${constructionId}/info`);
+  }
 
   const calculateDeadlineProgress = (construction: Construction) => {
     const now = new Date().getTime();
@@ -96,7 +116,7 @@ const DashboardTable: React.FC = () => {
                   <Progress
                     value={deadlineProgress}
                     className="h-4 w-[80px] rounded-lg bg-gray-200 dark:bg-gray-300"
-                    classNameIndicator={`bg-gray-800 rounded-lg transition-all duration-500`}
+                    classNameIndicator={`${getProgressColor(status)} rounded-lg transition-all duration-500`}
                   />
                 </TableCell>
 
@@ -116,7 +136,9 @@ const DashboardTable: React.FC = () => {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
+                          <Button 
+                            onClick={() => handleView(construction.id)} 
+                            className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
                             <Eye color={theme === 'dark' ? 'white' : 'black'} />
                           </Button>
                         </TooltipTrigger>

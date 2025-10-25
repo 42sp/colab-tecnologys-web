@@ -17,6 +17,10 @@ import { useEffect, useState, useCallback } from "react";
 import type { Construction } from "@/types/construction.types";
 import { constructionService } from "@/services/constructionService"; // Certifique-se que o caminho esteja correto
 
+// 🚀 IMPORTAÇÕES DO FRAMER MOTION
+import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "@/utils/framer-variants"; // Importa as variantes que você forneceu
+
 // Dados de exemplo (mantidos como mock para visualização, mas no futuro devem vir da API)
 const floorsDataMock = [
   { name: "Térreo", progress: 78, color: "bg-green-500" },
@@ -33,33 +37,56 @@ const teamDataMock = [
   { role: "Encarregado hidráulico", name: "Marcelo Santos" },
 ];
 
+const constructionImages: string[] = [
+  "https://plus.unsplash.com/premium_photo-1681691757922-fe230ecaa072?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870",
+  "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870",
+  "https://images.unsplash.com/photo-1429497419816-9ca5cfb4571a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=871",
+  "https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=464",
+  "https://images.unsplash.com/photo-1591588582259-e675bd2e6088?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=774",
+  "https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=479",
+  "https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=797",
+  "https://plus.unsplash.com/premium_photo-1681690860636-3d96ea7a593b?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=870",
+];
+
+const getRandomImage = () => {
+  if (constructionImages.length === 0) return ""; // fallback se lista vazia
+  const index = Math.floor(Math.random() * constructionImages.length);
+  return constructionImages[index];
+};
+
 // Função auxiliar para formatação de data
 const formatDate = (dateString?: string | null) => {
   if (!dateString) return "Não Informado";
   try {
-    return new Date(dateString).toLocaleDateString('pt-BR');
+    return new Date(dateString).toLocaleDateString("pt-BR");
   } catch {
     return "Data Inválida";
   }
 };
 
 const getStatusDisplay = (construction?: Construction | null) => {
-    if (!construction) return { text: "Carregando...", badge: "bg-gray-400 text-gray-800" };
-    
-    // Lógica simples de status (melhorar com base em 'status' ou lógica mais complexa se houver)
-    if (construction.finished_at) return { text: "Concluído", badge: "bg-green-100 text-green-700" };
+  if (!construction)
+    return { text: "Carregando...", badge: "bg-gray-400 text-gray-800" };
 
-    const expectedEnd = construction.expected_end_date ? new Date(construction.expected_end_date) : null;
-    const now = new Date();
-    
-    // Se a data final esperada for passada e não estiver concluído
-    if (expectedEnd && expectedEnd < now) {
-        return { text: "Atrasado", badge: "bg-red-100 text-red-700" };
-    }
+  // Lógica simples de status (melhorar com base em 'status' ou lógica mais complexa se houver)
+  if (construction.finished_at)
+    return { text: "Concluído", badge: "bg-green-100 text-green-700" };
 
-    return { text: "Em Andamento", badge: "bg-blue-100 text-blue-700" };
+  const expectedEnd = construction.expected_end_date
+    ? new Date(construction.expected_end_date)
+    : null;
+  const now = new Date();
+
+  // Se a data final esperada for passada e não estiver concluído
+  if (expectedEnd && expectedEnd < now) {
+    return { text: "Atrasado", badge: "bg-red-100 text-red-700" };
+  }
+
+  return { text: "Em Andamento", badge: "bg-blue-100 text-blue-700" };
 };
 
+// 🌟 Criação de um Card animado para aplicar as variantes
+const MotionCard = motion(Card);
 
 export default function GeneralInfo() {
   const { workId } = useParams<{ workId: string }>();
@@ -75,7 +102,10 @@ export default function GeneralInfo() {
       setConstruction(data);
     } catch (err) {
       console.error("Erro ao buscar construção:", err);
-      setError((err as any)?.message || "Falha ao carregar os detalhes do empreendimento.");
+      setError(
+        (err as any)?.message ||
+          "Falha ao carregar os detalhes do empreendimento."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -92,13 +122,15 @@ export default function GeneralInfo() {
 
   const statusDisplay = getStatusDisplay(construction);
   // Simulação de progresso total, pois a API Construction não fornece o progresso (%) diretamente
-  const totalProgress = construction?.finished_at ? 100 : 65; 
+  const totalProgress = construction?.finished_at ? 100 : 65;
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <span className="ml-2 text-gray-600">Carregando detalhes do empreendimento...</span>
+        <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+        <span className="ml-2 text-gray-600">
+          Carregando detalhes do empreendimento...
+        </span>
       </div>
     );
   }
@@ -113,30 +145,59 @@ export default function GeneralInfo() {
   }
 
   if (!construction) {
-    return <div className="text-center p-8 text-gray-500">Empreendimento não encontrado.</div>;
+    return (
+      <div className="text-center p-8 text-gray-500">
+        Empreendimento não encontrado.
+      </div>
+    );
   }
 
+  const randomImage = getRandomImage();
+
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto py-4">
-      
-      {/* CARD 1: Foto do Empreendimento (Mantido mock) */}
-      <Card className="shadow-md border border-gray-300">
+    // 1. Container principal com as variantes de animação
+    <motion.div
+      className="flex flex-col gap-6 max-w-4xl mx-auto py-4"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* CARD 1: Foto do Empreendimento */}
+      <MotionCard
+        className="shadow-md border border-gray-300 flex flex-col h-[400px] pb-0"
+        variants={itemVariants} // Aplica a variante de item
+      >
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-gray-900">
             {construction.name}
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          <img
-            src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29" // Mock Image
-            alt={`Empreendimento ${construction.name}`}
-            className="w-full h-64 object-cover rounded-b-xl"
-          />
-        </CardContent>
-      </Card>
 
-      {/* CARD 2: Informações Resumidas (Consumindo dados da API) */}
-      <Card className="shadow-md border border-gray-300">
+        <CardContent className="p-0 mt-auto">
+          {randomImage ? (
+            // Imagem também pode ser animada
+            <motion.img
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              src={randomImage}
+              alt={`Empreendimento ${construction.name}`}
+              className="w-full h-80 object-cover rounded-b-xl"
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-80 flex items-center justify-center bg-gray-100 text-gray-500">
+              Sem imagem disponível
+            </div>
+          )}
+        </CardContent>
+      </MotionCard>
+
+      {/* CARD 2: Informações Resumidas */}
+      <MotionCard
+        className="shadow-md border border-gray-300"
+        variants={itemVariants} // Aplica a variante de item
+      >
         <CardHeader className="p-4 pb-2">
           <div className="flex items-center">
             <Building className="w-5 h-5 mr-2 text-gray-700" />
@@ -148,13 +209,16 @@ export default function GeneralInfo() {
 
         <CardContent className="px-4 pt-0">
           <div className="grid grid-cols-2 gap-4 text-sm">
+            {/* Itens do grid também poderiam ser animados individualmente, mas manteremos no Card */}
             {/* Item 1: Data de Início */}
             <div className="flex flex-col">
               <div className="flex items-center text-gray-500 mb-1">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>Data de início</span>
               </div>
-              <span className="font-medium text-gray-800">{formatDate(construction.start_date)}</span>
+              <span className="font-medium text-gray-800">
+                {formatDate(construction.start_date)}
+              </span>
             </div>
 
             {/* Item 2: Previsão de Entrega */}
@@ -163,17 +227,20 @@ export default function GeneralInfo() {
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>Previsão de entrega</span>
               </div>
-              <span className="font-medium text-gray-800">{formatDate(construction.expected_end_date)}</span>
+              <span className="font-medium text-gray-800">
+                {formatDate(construction.expected_end_date)}
+              </span>
             </div>
 
-            {/* Item 3: Endereço (Mudança: Endereço completo) */}
+            {/* Item 3: Endereço */}
             <div className="flex flex-col col-span-2">
               <div className="flex items-center text-gray-500 mb-1">
                 <Building className="w-4 h-4 mr-2" />
                 <span>Endereço</span>
               </div>
               <span className="font-medium text-gray-800">
-                {construction.address}, {construction.city} - {construction.state}
+                {construction.address}, {construction.city} -{" "}
+                {construction.state}
               </span>
             </div>
 
@@ -187,17 +254,22 @@ export default function GeneralInfo() {
                 <span className="font-medium text-gray-800 mr-2">
                   {statusDisplay.text}
                 </span>
-                <Badge className={`${statusDisplay.badge} text-xs font-semibold px-2.5 py-0.5 rounded-full hover:bg-gray-100`}>
+                <Badge
+                  className={`${statusDisplay.badge} text-xs font-semibold px-2.5 py-0.5 rounded-full hover:bg-gray-100`}
+                >
                   {totalProgress}%
                 </Badge>
               </div>
             </div>
           </div>
         </CardContent>
-      </Card>
+      </MotionCard>
 
-      {/* CARD 3: Andares e Conclusão (Mantido mock, pois a API não fornece esses dados) */}
-      <Card className="shadow-md border border-gray-300">
+      {/* CARD 3: Andares e Conclusão */}
+      <MotionCard
+        className="shadow-md border border-gray-300"
+        variants={itemVariants} // Aplica a variante de item
+      >
         <CardHeader className="p-4 pb-2">
           <div className="flex items-center">
             <Clock className="w-5 h-5 mr-2 text-gray-700" />
@@ -209,24 +281,32 @@ export default function GeneralInfo() {
 
         <CardContent className="p-4 pt-2">
           <div className="space-y-4">
+            {/* Animando cada barra de progresso individualmente */}
             {floorsDataMock.map((floor, index) => (
-              <div key={index}>
+              <motion.div
+                key={index}
+                variants={itemVariants} // Aplica a variante de item para cada andar
+              >
                 <div className="flex justify-between items-center mb-1 text-sm text-gray-900">
                   <span>{floor.name}</span>
                   <span>{floor.progress}%</span>
                 </div>
+                {/* Progress não é um componente do Framer, mas o seu wrapper sim */}
                 <Progress
                   value={floor.progress}
                   className={`h-2 [&>div]:${floor.color}`}
                 />
-              </div>
+              </motion.div>
             ))}
           </div>
         </CardContent>
-      </Card>
+      </MotionCard>
 
-      {/* CARD 4: Equipe de Trabalho (Mantido mock, pois a API não fornece esses dados) */}
-      <Card className="shadow-md border border-gray-300">
+      {/* CARD 4: Equipe de Trabalho */}
+      <MotionCard
+        className="shadow-md border border-gray-300"
+        variants={itemVariants} // Aplica a variante de item
+      >
         <CardHeader className="p-4 pb-2">
           <div className="flex items-center">
             <Users className="w-5 h-5 mr-2 text-gray-700" />
@@ -249,20 +329,25 @@ export default function GeneralInfo() {
               </TableRow>
             </TableHeader>
             <TableBody>
+              {/* Animando cada linha da tabela */}
               {teamDataMock.map((member, index) => (
-                <TableRow key={index} className="hover:bg-gray-50/50">
+                <motion.tr
+                  key={index}
+                  className="hover:bg-gray-50/50"
+                  variants={itemVariants} // Aplica a variante de item para cada linha
+                >
                   <TableCell className="font-medium text-gray-700 w-1/2 py-3">
                     {member.role}
                   </TableCell>
                   <TableCell className="text-gray-900 w-1/2 py-3">
                     {member.name}
                   </TableCell>
-                </TableRow>
+                </motion.tr>
               ))}
             </TableBody>
           </Table>
         </CardContent>
-      </Card>
-    </div>
+      </MotionCard>
+    </motion.div>
   );
 }
