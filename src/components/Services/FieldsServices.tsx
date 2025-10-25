@@ -217,9 +217,9 @@ const FieldsServices = () => {
             <SelectValue placeholder="Classificação" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="eletrica">Elétrica</SelectItem>
-            <SelectItem value="hidraulica">Hidráulica</SelectItem>
-            <SelectItem value="civil">Civil</SelectItem>
+            <SelectItem value="marcacao">Marcação</SelectItem>
+            <SelectItem value="fixacao">Fixação</SelectItem>
+            <SelectItem value="elevacao">Elevação</SelectItem>
           </SelectContent>
         </Select>
 
