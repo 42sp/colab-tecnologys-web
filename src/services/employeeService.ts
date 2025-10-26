@@ -15,7 +15,7 @@ type EmployeeOrchestrationService = ServiceMethods<
 // 1. Serviço Orquestrador (para CREATE e PATCH)
 // Chama o endpoint 'employee', que tem o hook de orquestração.
 const employeeOrchestratorService = client.service(
-  "employee"
+  "users"
 ) as unknown as EmployeeOrchestrationService;
 
 // 2. Serviço de Leitura (para FIND e GET)
