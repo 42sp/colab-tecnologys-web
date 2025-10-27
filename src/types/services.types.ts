@@ -12,6 +12,7 @@ export type Services = {
   elevation_m2: number; // ← CSV: 'ELEVAÇÃO (M²)'
   qty_material_m2: number; // ← CSV: 'QTO MAT (m²)'
   qty_model_m2: number; // ← CSV: 'QTO MOD (m²)'
+  is_done: boolean;
 };
 
 export interface ServicesClientService {

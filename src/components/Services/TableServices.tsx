@@ -28,7 +28,7 @@ const MotionTbody = motion.tbody;
 const MotionTr = motion.tr;
 
 const TableServices = () => {
-  const { data, isLoading, error } = useServices(); 
+  const { data, isLoading, error, } = useServices(); 
 
   const table = useReactTable({
     data: data,

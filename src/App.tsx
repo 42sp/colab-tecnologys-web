@@ -19,6 +19,15 @@ import { ConstructionsProvider } from "./contexts/ConstructionsContext.tsx";
 import { EmployeesProvider } from "./contexts/EmployeesContext.tsx";
 import { ServicesProvider } from "./contexts/ServicesContext.tsx";
 import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 function App() {
   return (
@@ -36,11 +45,11 @@ function App() {
         theme="dark"
       />
       <BrowserRouter>
-        <AuthProvider>
-          <LogProvider>
-            <EmployeesProvider>
-              <ConstructionsProvider>
-
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <LogProvider>
+              <EmployeesProvider>
+                <ConstructionsProvider>
                   <LogToggleButton />
                   <Routes>
                     <Route path="/" element={<Login />} />
@@ -76,18 +85,18 @@ function App() {
                       path="/empreendimentos/:workId"
                       element={
                         <ProtecteRoute>
-                          
                           <EnterpriseLayout />
-                          
                         </ProtecteRoute>
                       }
                     >
                       <Route path="info" element={<GeneralInfo />} />
-                      <Route path="servicos" element={
+                      <Route
+                        path="servicos"
+                        element={
                           <ServicesProvider>
-                          <Services />
+                            <Services />
                           </ServicesProvider>
-                      }
+                        }
                       />
                       <Route path="andares" element={<FloorsAndQuantities />} />
                       <Route path="documentos" element={<Documents />} />
@@ -111,11 +120,11 @@ function App() {
                       }
                     />
                   </Routes>
-
-              </ConstructionsProvider>
-            </EmployeesProvider>
-          </LogProvider>
-        </AuthProvider>
+                </ConstructionsProvider>
+              </EmployeesProvider>
+            </LogProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </BrowserRouter>
     </>
   );

@@ -40,7 +40,7 @@ const getProgressColor = (status: string) => {
 
 const DashboardTable: React.FC = () => {
   const { theme } = useTheme();
-  const { constructions, refetch } = useConstructionsContext();
+  const { constructions, refetch, constructionsProgress } = useConstructionsContext();
   const [updating, setUpdating] = useState<string | null>(null);
   const [editingConstruction, setEditingConstruction] = useState<Construction | null>(null);
 
@@ -100,6 +100,9 @@ const DashboardTable: React.FC = () => {
             const { status, badgeClass } = getStatusFromDates(construction);
             const deadlineProgress = calculateDeadlineProgress(construction);
 
+            const currentProgress = constructionsProgress[construction.id] || 0;
+            const progressColor = getProgressColor(status);
+
             return (
               <TableRow key={construction.id} className='border border-gray-300 text-base'>
                 <TableCell className="font-medium">{construction.name}</TableCell>
@@ -111,7 +114,7 @@ const DashboardTable: React.FC = () => {
                   <Badge className={badgeClass}>{status}</Badge>
                 </TableCell>
 
-                {/* Coluna de Prazo com Progress shadcn */}
+                {/* Coluna de Prazo com Progress */}
                 <TableCell className="text-center px-4">
                   <Progress
                     value={deadlineProgress}
@@ -121,7 +124,7 @@ const DashboardTable: React.FC = () => {
                 </TableCell>
 
                 {/* Coluna de Progresso mock 50% */}
-                <TableCell className="text-center font-bold text-gray-700">50%</TableCell>
+                <TableCell className="text-center font-bold text-gray-700">{Math.round(currentProgress)}%</TableCell>
 
                 <TableCell className='text-center'>
                   {construction.start_date ? new Date(construction.start_date).toLocaleDateString() : '-'}
