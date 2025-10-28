@@ -1,14 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { ThemeProvider } from './components/ThemeProvider.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.tsx";
+import { ThemeProvider } from "./components/ThemeProvider.tsx";
 
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-		 <ThemeProvider defaultTheme="system" storageKey="segy-theme">
-    		<App />
-		 </ThemeProvider>
-  </StrictMode>,
-)
+    <ThemeProvider defaultTheme="system" storageKey="segy-theme">
+      <App />
+    </ThemeProvider>
+  </StrictMode>
+);
