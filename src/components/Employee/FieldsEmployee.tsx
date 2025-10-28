@@ -14,10 +14,18 @@ import { Button } from "../ui/button";
 import { useEmployeesContext } from "@/contexts/EmployeesContext";
 import CreateEmployeeModal from "./CreateEmployeeModal";
 
+// SUPABASE
+// const jobRoles = [
+//   { value: "7bbe6f8a-f4f6-4dcd-85ca-ca692a400942-de-obras", label: "Administrador" },
+//   { value: "fa06a689-3d84-4cc5-93cd-88025e5d0bd2", label: "Executor" },
+//   { value: "0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5", label: "Encarregado" },
+// ];
+
+// EASYPANEL
 const jobRoles = [
-  { value: "0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5", label: "Encarregado" },
-  { value: "fa06a689-3d84-4cc5-93cd-88025e5d0bd2", label: "Executor" },
-  { value: "7bbe6f8a-f4f6-4dcd-85ca-ca692a400942-de-obras", label: "Administrador" },
+    { value: "8ca0ad23-46fb-4fdb-bdd4-f788e9959a92", label: "Administrador" },
+    { value: "41f68bd0-cd48-4bfa-ad10-364a677271f8", label: "Executor" },
+    { value: "8f2a9ad7-19e9-4ecb-8285-e11663e531db", label: "Encarregado" },
 ];
 
 const FieldsEmployee = () => {
