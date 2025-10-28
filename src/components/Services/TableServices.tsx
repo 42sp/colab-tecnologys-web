@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { motion } from "framer-motion"; 
-import { containerVariants, itemVariants, tableRowFadeInVariants } from "@/utils/framer-variants"; 
+import { containerVariants, tableRowFadeInVariants } from "@/utils/framer-variants"; 
 
 import { columns } from "./TableColumns";
 
@@ -23,12 +23,11 @@ import FooterService from "./FooterService";
 import { cn } from "@/lib/utils";
 import { useServices } from "@/contexts/ServicesContext";
 
-// 🌟 Criação de componentes motion para os elementos da tabela
 const MotionTbody = motion.tbody;
 const MotionTr = motion.tr;
 
 const TableServices = () => {
-  const { data, isLoading, error, } = useServices(); 
+  const { data, isLoading, error, total, page, pageSize, setPage, setPageSize } = useServices();
 
   const table = useReactTable({
     data: data,
@@ -162,7 +161,14 @@ const TableServices = () => {
         </Table>
       </div>
 
-      <FooterService />
+      <FooterService 
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        dataLength={data.length}
+        setPage={setPage}
+        setPageSize={setPageSize}
+      />
     </div>
   );
 };
