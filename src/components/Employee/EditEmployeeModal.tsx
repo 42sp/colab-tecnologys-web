@@ -22,10 +22,18 @@ interface EditEmployeeModalProps {
 type FormData = Partial<Omit<FullEmployeeProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>>;
 
 // Mapeamento dos Cargos
+// SUPABASE
+// const ROLES = {
+    //     admin: '7bbe6f8a-f4f6-4dcd-85ca-ca692a400942',
+    //     executor: 'fa06a689-3d84-4cc5-93cd-88025e5d0bd2',
+//     encarregado: '0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5',
+// };
+
+// EASYPANEL
 const ROLES = {
-    encarregado: '0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5',
-    admin: '7bbe6f8a-f4f6-4dcd-85ca-ca692a400942',
-    executor: 'fa06a689-3d84-4cc5-93cd-88025e5d0bd2',
+    admin: '8ca0ad23-46fb-4fdb-bdd4-f788e9959a92',
+    executor: '41f68bd0-cd48-4bfa-ad10-364a677271f8',
+    encarregado: '8f2a9ad7-19e9-4ecb-8285-e11663e531db',
 };
 
 // Função utilitária para limpar o CPF e Telefone antes da validação
