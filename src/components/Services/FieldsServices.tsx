@@ -1,5 +1,3 @@
-// src/components/FieldsServices/FieldsServices.tsx
-
 import { Plus, UploadCloud } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -178,14 +176,12 @@ const FieldsServices = () => {
           queryClient.invalidateQueries({
             queryKey: ["uniqueFilters", constructionId],
           });
-          // onImportSuccess(); // Chame sua função de recarregar a tela/tabela aqui
         } catch (error: any) {
-          const apiErrors = error.data?.errors; // Feathers anexa dados customizados em 'error.data'
+          const apiErrors = error.data?.errors;
           const defaultMessage =
             error.message || "Erro desconhecido ao comunicar com a API.";
 
           if (apiErrors && Array.isArray(apiErrors) && apiErrors.length > 0) {
-            // Erros de validação detalhados do método importBulk
             const firstError = apiErrors[0];
             const errorSummary = `Falha na linha ${firstError.line} (${firstError.header}): ${firstError.reason}`;
 
@@ -197,7 +193,6 @@ const FieldsServices = () => {
               apiErrors
             );
           } else {
-            // Erro genérico (ex: 401 Auth, 500 Server Error ou erro de rede)
             toast.error(`⚠️ Falha na importação: ${defaultMessage}`);
             console.error(`ERROR: Erro na chamada da API:`, error);
           }
@@ -210,9 +205,6 @@ const FieldsServices = () => {
     });
   };
 
-  /**
-   * Aciona o clique no input de arquivo oculto.
-   */
   const handleClickImport = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -226,7 +218,6 @@ const FieldsServices = () => {
   };
 
   return (
-    // ... (O restante do JSX permanece inalterado)
     <div className="flex justify-between mt-10 flex-nowrap">
       {/* Seção de filtros */}
       <div className="flex space-x-2">

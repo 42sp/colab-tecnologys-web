@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Services as TableServiceData } from "../components/Services/TableColumns";
-import { servicesService } from "@/services/servicesService"; 
-import { useAuth } from "@/contexts/AuthContext"; 
+import { servicesService } from "@/services/servicesService";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface HookResult {
   services: TableServiceData[];
@@ -9,10 +9,6 @@ interface HookResult {
   error: string | null;
 }
 
-/**
- * Mapeia um único registro do DB (M, F ou E) para uma linha de exibição na tabela.
- * A coluna correspondente ao tipo de serviço recebe o valor, as outras são zeradas.
- */
 const mapDbServiceToTableLine = (dbService: any): TableServiceData => {
   const isMarcacao = dbService.service_id.startsWith("M-");
   const isFixacao = dbService.service_id.startsWith("F-");
@@ -38,27 +34,26 @@ const mapDbServiceToTableLine = (dbService: any): TableServiceData => {
   };
 };
 
-// Hook adaptado para receber parâmetros do Contexto
 export const useGetServices = (
   workId: string | null,
   filters: any,
   refetchIndex: number
 ): HookResult => {
-  const { isAuthenticated, isLoadingAuth } = useAuth(); // ✅ Obtendo o status de autenticação
+  const { isAuthenticated, isLoadingAuth } = useAuth();
   const [services, setServices] = useState<TableServiceData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchServices = useCallback(async () => {
-    // 🛑 1. CHECK DE AUTENTICAÇÃO (Resolve o problema de timing do JWT)
     if (!isAuthenticated) {
-      console.warn("[useGetServices] Usuário não autenticado. Busca cancelada.");
+      console.warn(
+        "[useGetServices] Usuário não autenticado. Busca cancelada."
+      );
       setIsLoading(false);
       setServices([]);
       return;
     }
 
-    // 🛑 2. CHECK DO workId
     if (!workId) {
       console.error(
         "[useGetServices] ERRO: ID da Construção ausente. Não será feita a busca."
@@ -73,32 +68,35 @@ export const useGetServices = (
 
     try {
       console.log("[FETCH] workId sendo buscado:", workId);
-      
+
       const queryParams = {
         work_id: workId,
         ...filters,
         $limit: 1000,
-        // ✅ REINCLUINDO SORT (Use este formato se você quiser a ordenação de volta)
         $sort: { tower: 1, floor: 1, apartment: 1 },
       };
-      
+
+      if (filters.tower && filters.tower !== "all") {
+        queryParams.tower = filters.tower;
+      }
+      if (filters.floor && filters.floor !== "all") {
+        queryParams.floor = filters.floor;
+      }
+
       console.log("[FETCH] Query Params:", queryParams);
 
-      // ✅ Usando a abstração de serviço que trata a resposta do Feathers
-      const dbServices = await servicesService.find(queryParams); 
+      const dbServices = await servicesService.find(queryParams);
 
-      // Log da resposta
       const data = Array.isArray(dbServices) ? dbServices : [];
       console.log(
         "[useGetServices] Resposta da API:",
         data.length,
         "registros encontrados."
-      ); 
+      );
 
       const mappedData = data.map(mapDbServiceToTableLine);
       setServices(mappedData);
     } catch (err: any) {
-      // Log mais detalhado
       console.error(
         "Erro ao buscar serviços (detalhe):",
         err.name,
@@ -118,11 +116,9 @@ export const useGetServices = (
   }, [workId, filters, isAuthenticated]);
 
   useEffect(() => {
-    // 🛑 Executa a busca SOMENTE quando o estado de autenticação for resolvido
     if (!isLoadingAuth) {
       fetchServices();
     }
-    // O refetchIndex força uma nova execução do fetchServices quando alterado
   }, [isLoadingAuth, fetchServices, refetchIndex]);
 
   return { services, isLoading, error };
