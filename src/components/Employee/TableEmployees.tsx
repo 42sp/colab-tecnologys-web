@@ -14,7 +14,7 @@ import {
   type ColumnDef,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Eye, Pencil } from "lucide-react";
+import { ChevronLeft, ChevronRight, Eye, Pencil, Loader2 } from "lucide-react";
 import { useState } from "react";
 import ViewEmployeeModal from "./ViewEmployeeModal";
 import EditEmployeeModal from "./EditEmployeeModal";
@@ -24,7 +24,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-
 
 // Tipo base da linha da tabela
 type EmployeeRow = {
@@ -65,8 +64,12 @@ const getRoleName = (role_id: string) => roleMap[role_id] ?? "—";
 //  Tabela principal
 const TableEmployees = () => {
   const { employees, isLoading, refetch } = useEmployeesContext();
-  const [viewingEmployeeId, setViewingEmployeeId] = useState<string | null>(null);
-  const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(null);
+  const [viewingEmployeeId, setViewingEmployeeId] = useState<string | null>(
+    null
+  );
+  const [editingEmployeeId, setEditingEmployeeId] = useState<string | null>(
+    null
+  );
 
   const handleView = (employeeId: string) => {
     setViewingEmployeeId(employeeId);
@@ -79,7 +82,7 @@ const TableEmployees = () => {
   const handleEditClose = (edited = false) => {
     setEditingEmployeeId(null);
     if (edited) {
-        refetch(); 
+      refetch();
     }
   };
 
@@ -144,8 +147,6 @@ const TableEmployees = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  if (isLoading) return <p>Carregando...</p>;
 
   return (
     <>
@@ -232,7 +233,7 @@ const TableEmployees = () => {
 
       <EditEmployeeModal
         employeeId={editingEmployeeId}
-        onClose={handleEditClose} 
+        onClose={handleEditClose}
       />
     </>
   );

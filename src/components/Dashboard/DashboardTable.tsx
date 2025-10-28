@@ -8,9 +8,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 import { useTheme } from '@/hooks/useTheme';
 import { useConstructionsContext } from '@/contexts/ConstructionsContext';
 import { constructionService } from '@/services/constructionService';
-import type { Construction } from '@/types/construction.types';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import EditConstructionModal from './EditConstructionModal';
+import type { Construction } from '@/types/construction.types';
 
 const getStatusFromDates = (construction: Construction) => {
   const now = new Date();
@@ -24,9 +25,22 @@ const getStatusFromDates = (construction: Construction) => {
   return { status: 'Agendada', badgeClass: 'bg-blue-100 text-blue-800 text-base' };
 };
 
+const getProgressColor = (status: string) => {
+  switch (status) {
+    case 'Em andamento':
+      return 'bg-yellow-400';
+    case 'Atrasado':
+      return 'bg-red-500';
+    case 'Concluído':
+      return 'bg-green-500';
+    default:
+      return 'bg-gray-500';
+  }
+};
+
 const DashboardTable: React.FC = () => {
   const { theme } = useTheme();
-  const { constructions, refetch } = useConstructionsContext();
+  const { constructions, refetch, constructionsProgress } = useConstructionsContext();
   const [updating, setUpdating] = useState<string | null>(null);
   const [editingConstruction, setEditingConstruction] = useState<Construction | null>(null);
 
@@ -49,6 +63,12 @@ const DashboardTable: React.FC = () => {
   const handleCloseEditModal = () => {
       setEditingConstruction(null);
   };
+
+  const navigate = useNavigate();
+
+  const handleView = (constructionId: string) => {
+    navigate(`/empreendimentos/${constructionId}/info`);
+  }
 
   const calculateDeadlineProgress = (construction: Construction) => {
     const now = new Date().getTime();
@@ -80,6 +100,9 @@ const DashboardTable: React.FC = () => {
             const { status, badgeClass } = getStatusFromDates(construction);
             const deadlineProgress = calculateDeadlineProgress(construction);
 
+            const currentProgress = constructionsProgress[construction.id] || 0;
+            const progressColor = getProgressColor(status);
+
             return (
               <TableRow key={construction.id} className='border border-gray-300 text-base'>
                 <TableCell className="font-medium">{construction.name}</TableCell>
@@ -91,17 +114,17 @@ const DashboardTable: React.FC = () => {
                   <Badge className={badgeClass}>{status}</Badge>
                 </TableCell>
 
-                {/* Coluna de Prazo com Progress shadcn */}
+                {/* Coluna de Prazo com Progress */}
                 <TableCell className="text-center px-4">
                   <Progress
                     value={deadlineProgress}
                     className="h-4 w-[80px] rounded-lg bg-gray-200 dark:bg-gray-300"
-                    classNameIndicator={`bg-gray-800 rounded-lg transition-all duration-500`}
+                    classNameIndicator={`${getProgressColor(status)} rounded-lg transition-all duration-500`}
                   />
                 </TableCell>
 
                 {/* Coluna de Progresso mock 50% */}
-                <TableCell className="text-center font-bold text-gray-700">50%</TableCell>
+                <TableCell className="text-center font-bold text-gray-700">{Math.round(currentProgress)}%</TableCell>
 
                 <TableCell className='text-center'>
                   {construction.start_date ? new Date(construction.start_date).toLocaleDateString() : '-'}
@@ -116,7 +139,9 @@ const DashboardTable: React.FC = () => {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
+                          <Button 
+                            onClick={() => handleView(construction.id)} 
+                            className='bg-transparent hover:bg-transparent border border-gray-300 w-[36px] h-[36px] cursor-pointer'>
                             <Eye color={theme === 'dark' ? 'white' : 'black'} />
                           </Button>
                         </TooltipTrigger>

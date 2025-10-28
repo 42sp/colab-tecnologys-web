@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { constructionService } from "@/services/constructionService";
+import { servicesService } from "@/services/servicesService";
 import type { Construction } from "@/types/construction.types";
 import type { ReactNode } from "react";
 
@@ -25,6 +26,7 @@ interface ConstructionsContextType {
   refetch: () => Promise<void>;
   filters: Filters;
   setFilters: (filters: Filters) => void;
+  constructionsProgress: Record<string, number>;
 }
 
 const ConstructionsContext = createContext<ConstructionsContextType | null>(null);
@@ -36,6 +38,8 @@ export function ConstructionsProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [constructionsProgress, setConstructionsProgress] = useState<Record<string, number>>({});
+
 
   const fetchConstructions = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -51,6 +55,26 @@ export function ConstructionsProvider({ children }: { children: ReactNode }) {
     try {
       const data = await constructionService.find(query);
       setConstructions(data);
+
+      const progressPromises = data.map(c => 
+          servicesService.calculateProgressByConstruction(c.id)
+            .then(result => ({ id: c.id, progress: result.progress }))
+            .catch(err => {
+                console.error(`Erro ao calcular progresso para ${c.name}:`, err);
+                return { id: c.id, progress: 0 };
+            })
+      );
+
+      const progressResults = await Promise.all(progressPromises);
+      
+      // Cria o mapa { [id]: porcentagem }
+      const newProgressMap = progressResults.reduce((acc, current) => {
+          acc[current.id] = current.progress;
+          return acc;
+      }, {} as Record<string, number>);
+      
+      setConstructionsProgress(newProgressMap);
+
     } catch (err) {
       setError((err as any)?.message || "Falha ao carregar construções");
     } finally {
@@ -91,7 +115,9 @@ export function ConstructionsProvider({ children }: { children: ReactNode }) {
       error,
       refetch: fetchConstructions,
       filters,
-      setFilters
+      setFilters,
+      constructionsProgress
+      
     }}>
       {children}
     </ConstructionsContext.Provider>

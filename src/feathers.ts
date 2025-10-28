@@ -3,6 +3,7 @@ import rest from '@feathersjs/rest-client';
 import auth from '@feathersjs/authentication-client';
 import type { Service } from '@feathersjs/feathers';
 
+import type { ServicesClientService } from './types/services.types'
 import type { Construction } from './types/construction.types';
 import type { Employee } from './types/employee.types';
 import type { User } from './types/user.types';
@@ -12,6 +13,7 @@ interface ServiceTypes {
   profile: Service<Employee>;
   users: Service<User>;
   employee: Service<Employee>;
+  services: ServicesClientService;
   authentication: any;
 }
 
@@ -28,6 +30,19 @@ client.configure(
     storage: window.localStorage,
   })
 );
+
+const servicesService = client.service('services');
+
+if (!servicesService.importBulk) {
+    console.warn("[Feathers] Método 'importBulk' não encontrado. Adicionando manualmente.");
+    servicesService.importBulk = async (data: any) => {
+        return servicesService.create(data, {
+            query: {
+                importBulk: true
+            }
+        });
+    };
+}
 
 // 🧠 Reautenticação automática ao carregar o app
 (async () => {
