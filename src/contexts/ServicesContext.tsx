@@ -5,16 +5,25 @@ import { useParams } from "react-router-dom";
 import type { Services as TableServiceData } from "@/components/Services/TableColumns";
 import { useGetServices } from "@/hooks/useGetService";
 
-// 1. Definição do Tipo do Contexto
 interface ServicesContextType {
     data: TableServiceData[];
     isLoading: boolean;
     error: string | null;
     workId: string | null;
     filters: any;
+
+    // Paginação
+    total: number; // Total de registros no servidor
+    page: number; // Página atual
+    pageSize: number; // Itens por página
+    setPage: (page: number) => void;
+    setPageSize: (size: number) => void;
+
     applyFilters: (newFilters: any) => void;
     refetch: () => void;
 }
+
+const DEFAULT_PAGE_SIZE = 10;
 
 const ServicesContext = createContext<ServicesContextType | undefined>(
     undefined
@@ -22,26 +31,34 @@ const ServicesContext = createContext<ServicesContextType | undefined>(
 
 
 export const ServicesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-
-    
     const { workId } = useParams<{ workId?: string }>(); 
-    
-    //console.log('[ServicesProvider] workId do useParams:', workId);
-
     const currentWorkId = workId || null; 
-    
-
-    
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
     const [filters, setFilters] = useState({});
     const [refetchIndex, setRefetchIndex] = useState(0); 
 
-    const { services, isLoading, error } = useGetServices(
+    const combinedFilters = useMemo(() => ({
+        ...filters,
+        $limit: pageSize,
+        $skip: (page - 1) * pageSize,
+    }), [filters, page, pageSize]);
+
+    const { services, total, isLoading, error } = useGetServices(
         currentWorkId,
-        filters,
+        combinedFilters,
         refetchIndex
     );
-    
-    // ... restante das funções applyFilters e refetch ...
+
+    const handleSetPage = (newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleSetPageSize = (newSize: number) => {
+        setPageSize(newSize);
+        setPage(1); // Sempre volta para a primeira página ao mudar o tamanho
+    };
+
     const applyFilters = (newFilters: any) => {
         setFilters((prev) => ({ ...prev, ...newFilters }));
     };
@@ -55,6 +72,11 @@ export const ServicesProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         error,
         workId: currentWorkId,
         filters,
+        total, 
+        page,
+        pageSize,
+        setPage: handleSetPage,
+        setPageSize: handleSetPageSize,
         applyFilters,
         refetch,
     }), [services, isLoading, error, currentWorkId, filters, refetchIndex]);

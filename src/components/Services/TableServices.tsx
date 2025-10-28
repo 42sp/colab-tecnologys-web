@@ -8,7 +8,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { motion } from "framer-motion"; 
-import { containerVariants, itemVariants, tableRowFadeInVariants } from "@/utils/framer-variants"; 
+import { containerVariants, tableRowFadeInVariants } from "@/utils/framer-variants"; 
 
 import { columns } from "./TableColumns";
 
@@ -23,12 +23,11 @@ import FooterService from "./FooterService";
 import { cn } from "@/lib/utils";
 import { useServices } from "@/contexts/ServicesContext";
 
-// 🌟 Criação de componentes motion para os elementos da tabela
 const MotionTbody = motion.tbody;
 const MotionTr = motion.tr;
 
 const TableServices = () => {
-  const { data, isLoading, error, } = useServices(); 
+  const { data, isLoading, error, total, page, pageSize, setPage, setPageSize } = useServices();
 
   const table = useReactTable({
     data: data,
@@ -91,7 +90,7 @@ const TableServices = () => {
           
           {/* 🌟 1. Animação aplicada no corpo da tabela */}
           <MotionTbody
-            variants={containerVariants} // Usamos containerVariants para o stagger
+            variants={containerVariants}
             initial="hidden"
             animate="visible"
           >
@@ -102,12 +101,12 @@ const TableServices = () => {
                   key={row.id}
                   variants={tableRowFadeInVariants} // Usamos itemVariants para a animação individual
                   data-state={row.getIsSelected() && "selected"}
-                  className="hover:bg-gray-50 transition-colors border-gray-300 even:bg-gray-50 odd:bg-white"
+                  className="hover:bg-gray-200 transition-colors border border-gray-300 even:bg-gray-50 odd:bg-white"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className="text-sm px-3 py-3 border-r border-gray-200 last:border-r-0"
+                      className="text-sm px-3 py-3 border-r border-gray-300 last:border-r-0"
                       style={{
                         width: `${cell.column.getSize()}px`,
                         minWidth: `${cell.column.columnDef.minSize || 80}px`,
@@ -128,7 +127,7 @@ const TableServices = () => {
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="hover:bg-gray-200 transition-colors border border-gray-300 even:bg-gray-50 odd:bg-white h-16 text-center text-gray-500"
                 >
                   Nenhum serviço encontrado para esta construção.
                 </TableCell>
@@ -141,7 +140,7 @@ const TableServices = () => {
             }).map((_, rowIndex) => (
               <TableRow
                 key={`empty-${rowIndex}`}
-                className="even:bg-gray-50 odd:bg-white border-gray-300"
+                className="hover:bg-gray-200 transition-colors border border-gray-300 even:bg-gray-50 odd:bg-white"
               >
                 {table.getHeaderGroups()[0].headers.map((header, colIndex) => (
                   <TableCell
@@ -162,7 +161,14 @@ const TableServices = () => {
         </Table>
       </div>
 
-      <FooterService />
+      <FooterService 
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        dataLength={data.length}
+        setPage={setPage}
+        setPageSize={setPageSize}
+      />
     </div>
   );
 };
