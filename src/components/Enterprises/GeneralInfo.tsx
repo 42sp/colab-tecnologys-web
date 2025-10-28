@@ -94,6 +94,12 @@ export default function GeneralInfo() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // ✨ Solução 1: Usa lazy initializer para sortear e armazenar a imagem APENAS na montagem.
+  const [currentImage] = useState(getRandomImage);
+  
+  // ✨ Solução 2: Estado para rastrear o status de carregamento da imagem.
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const fetchConstruction = useCallback(async (constructionId: string) => {
     setIsLoading(true);
     setError(null);
@@ -152,7 +158,7 @@ export default function GeneralInfo() {
     );
   }
 
-  const randomImage = getRandomImage();
+  // ❌ REMOVIDO: const randomImage = getRandomImage();
 
   return (
     // 1. Container principal com as variantes de animação
@@ -164,7 +170,10 @@ export default function GeneralInfo() {
     >
       {/* CARD 1: Foto do Empreendimento */}
       <MotionCard
-        className="shadow-md border border-gray-300 flex flex-col h-[400px] pb-0"
+        // ✨ CLASSE ATUALIZADA: Adiciona um fundo placeholder e animação "pulse" 
+        // se a imagem ainda não tiver carregado (imageLoaded é false).
+        className={`shadow-md border border-gray-300 flex flex-col h-[400px] pb-0 
+          ${imageLoaded ? '' : 'bg-gray-200 animate-pulse'}`}
         variants={itemVariants} // Aplica a variante de item
       >
         <CardHeader>
@@ -174,15 +183,20 @@ export default function GeneralInfo() {
         </CardHeader>
 
         <CardContent className="p-0 mt-auto">
-          {randomImage ? (
+          {currentImage ? (
             // Imagem também pode ser animada
             <motion.img
+              // ✨ ANIMAÇÃO ATUALIZADA: Opacidade controlada pelo estado 'imageLoaded'
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: imageLoaded ? 1 : 0 }}
               transition={{ duration: 0.5 }}
-              src={randomImage}
+              
+              // ✨ SRC ATUALIZADO: Usa o estado 'currentImage'
+              src={currentImage} 
               alt={`Empreendimento ${construction.name}`}
               className="w-full h-80 object-cover rounded-b-xl"
+              // ✨ HANDLER ADICIONADO: Define imageLoaded como true quando a imagem é carregada
+              onLoad={() => setImageLoaded(true)}
               loading="lazy"
             />
           ) : (

@@ -28,7 +28,7 @@ function ConstructionsList() {
   // Mapeamento dos dados dos cards
   const cards = [
     { label: "Total", value: cardData.total, icon: "🏠", color: "bg-gray-700" },
-    { label: "Em Andamento", value: cardData.inProgress, icon: "🚧", color: "bg-blue-600" },
+    { label: "Em Andamento", value: cardData.inProgress, icon: "🚧", color: "bg-yellow-600" },
     { label: "Atrasadas", value: cardData.delayed, icon: "🚨", color: "bg-red-600" },
     { label: "Concluídas", value: cardData.completed, icon: "✅", color: "bg-green-600" },
   ];

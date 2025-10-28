@@ -50,7 +50,7 @@ function App() {
             <LogProvider>
               <EmployeesProvider>
                 <ConstructionsProvider>
-                  <LogToggleButton />
+                  {/* <LogToggleButton /> */}
                   <Routes>
                     <Route path="/" element={<Login />} />
 

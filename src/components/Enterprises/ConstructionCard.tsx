@@ -10,17 +10,32 @@ interface ConstructionCardProps {
   construction: Construction;
 }
 
-const getStatusBadge = (status?: string) => {
+const getStatusFromDates = (construction: Construction): string => {
+  const now = new Date();
+  const start = construction.start_date ? new Date(construction.start_date) : null;
+  const end = construction.expected_end_date ? new Date(construction.expected_end_date) : null;
+
+  if (construction.finished_at) return 'Concluído';
+  if (end && end < now) return 'Atrasado';
+  if (start && start <= now && end && end >= now) return 'Em Andamento';
+
+  return 'Agendada';
+};
+
+const getStatusBadge = (status: string) => {
   const baseStyle = "text-xs font-semibold px-2.5 py-0.5 rounded-full";
+  
   switch (status) {
     case "Em Andamento":
-      return <Badge className={`bg-blue-100 text-blue-700 hover:bg-blue-100 ${baseStyle}`}>Em Andamento</Badge>;
+      return <Badge className={`bg-yellow-100 text-yellow-700 hover:bg-yellow-200 ${baseStyle}`}>{status}</Badge>;
     case "Atrasado":
-      return <Badge className={`bg-red-100 text-red-700 hover:bg-red-100 ${baseStyle}`}>Atrasado</Badge>;
+      return <Badge className={`bg-red-100 text-red-700 hover:bg-red-200 ${baseStyle}`}>{status}</Badge>;
     case "Concluído":
-      return <Badge className={`bg-green-100 text-green-700 hover:bg-green-100 ${baseStyle}`}>Concluído</Badge>;
+      return <Badge className={`bg-green-100 text-green-700 hover:bg-green-200 ${baseStyle}`}>{status}</Badge>;
+    case "Agendada":
+      return <Badge className={`bg-blue-100 text-blue-700 hover:bg-blue-200 ${baseStyle}`}>{status}</Badge>;
     default:
-      return <Badge className={`bg-gray-100 text-gray-700 hover:bg-gray-100 ${baseStyle}`}>Pendente</Badge>;
+      return <Badge className={`bg-gray-100 text-gray-700 hover:bg-gray-200 ${baseStyle}`}>Pendente</Badge>;
   }
 };
 
@@ -33,7 +48,7 @@ export function ConstructionCard({ construction }: ConstructionCardProps) {
     navigate(`/empreendimentos/${construction.id}/info`);
   };
 
-  const status = construction.finished_at ? "Concluído" : "Em Andamento"; // Lógica simples de status
+  const status = getStatusFromDates(construction); 
 
   const startDate = construction.start_date ? new Date(construction.start_date).toLocaleDateString() : 'N/A';
   const expectedEndDate = construction.expected_end_date ? new Date(construction.expected_end_date).toLocaleDateString() : 'N/A';

@@ -168,7 +168,7 @@ export default function Chat() {
               ))}
               {loading && (
                 <div className="p-2 rounded-md bg-gray-100 self-start max-w-[70%] flex items-center gap-2">
-                  <Loader2 className="animate-spin h-4 w-4" /> Processando...
+                  <Loader2 className="animate-spin h-4 w-4" /> Pensando...
                 </div>
               )}
             </div>

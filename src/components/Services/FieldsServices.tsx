@@ -312,17 +312,6 @@ const FieldsServices = () => {
           </SelectContent>
         </Select>
 
-        {/* Colunas */}
-        <Select>
-          <SelectTrigger className="w-[130px] border-gray-300 flex items-center gap-2 bg-white cursor-pointer">
-            <SelectValue placeholder="Colunas" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="default">Padrão</SelectItem>
-            <SelectItem value="compact">Compacta</SelectItem>
-            <SelectItem value="expandida">Expandida</SelectItem>
-          </SelectContent>
-        </Select>
 
         {/* Novo serviço */}
         <Button className="cursor-pointer">
