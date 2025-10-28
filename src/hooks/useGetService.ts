@@ -69,18 +69,35 @@ export const useGetServices = (
     try {
       console.log("[FETCH] workId sendo buscado:", workId);
 
-      const queryParams = {
+      const { text, ...restFilters } = filters;
+
+      const queryParams: any = {
         work_id: workId,
-        ...filters,
         $limit: 1000,
         $sort: { tower: 1, floor: 1, apartment: 1 },
       };
+
+      Object.assign(queryParams, restFilters);
 
       if (filters.tower && filters.tower !== "all") {
         queryParams.tower = filters.tower;
       }
       if (filters.floor && filters.floor !== "all") {
         queryParams.floor = filters.floor;
+      }
+
+      if (filters.acronym && filters.acronym !== "all") {
+        queryParams.acronym = filters.acronym;
+        console.log(
+          `[FETCH] Aplicando filtro de Classificação: ${filters.acronym}`
+        );
+      }
+
+      if (text && text.trim() !== "") {
+        queryParams.$search = text.trim();
+        console.log(`[FETCH] Aplicando filtro de Busca Rápida: ${text}`);
+      } else {
+        delete queryParams.$search;
       }
 
       console.log("[FETCH] Query Params:", queryParams);
