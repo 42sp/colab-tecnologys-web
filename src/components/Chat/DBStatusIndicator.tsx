@@ -64,7 +64,7 @@ export function DBStatusIndicator() {
             <Button
               size="sm"
               variant="ghost"
-              className="flex items-center gap-1 p-0 h-auto text-gray-600 hover:bg-transparent hover:text-gray-900"
+              className="flex items-center gap-1 p-0 h-auto text-gray-600 hover:bg-transparent hover:text-gray-900 cursor-pointer"
               onClick={checkStatus}
               disabled={status === "checking"}
             >
