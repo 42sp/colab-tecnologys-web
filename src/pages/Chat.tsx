@@ -1,15 +1,14 @@
-// Chat.tsx
+
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-// Assumindo que o tipo Message existe no caminho correto.
 import type { Message } from "@/components/Chat/types"; 
 import { N8N_WEBHOOK_URL, STATIC_CONTEXTO } from './staticContext';
 import { DBStatusIndicator } from "@/components/Chat/DBStatusIndicator"; 
 
-// --- Interfaces para Tipagem do Frontend ---
+
 
 interface TableMessageType {
     colunas: string[];
@@ -20,7 +19,7 @@ interface ChatMessage extends Message {
     tabela?: TableMessageType;
 }
 
-// --- Componente de Tabela ---
+
 
 function TableMessage({ tabela }: { tabela: TableMessageType }) {
     return (
@@ -51,7 +50,6 @@ function TableMessage({ tabela }: { tabela: TableMessageType }) {
     );
 }
 
-// --- Componente Principal Chat ---
 
 export default function Chat() {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -208,7 +206,6 @@ export default function Chat() {
                         <h1 className="text-2xl font-bold">Chat com IA</h1>
                         <p className="text-md text-gray-600 flex items-center gap-4">
                             Tire suas dúvidas com o agente IA
-                            {/* O componente DBStatusIndicator deve ser importado se for usado */}
                             {/* <DBStatusIndicator /> */}
                         </p>
                     </div>
