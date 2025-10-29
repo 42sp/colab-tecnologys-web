@@ -55,7 +55,7 @@ const UserMenu = (props: UserMenuProps) => {
 						{/* <MenubarItem>
 							New Tab <MenubarShortcut>⌘T</MenubarShortcut>
 						</MenubarItem> */}
-						{/* <MenubarItem onClick={toggleTheme}>{getIcon()} Tema {getTooltip()}</MenubarItem> */}
+						<MenubarItem onClick={toggleTheme}>{getIcon()} Tema {getTooltip()}</MenubarItem>
 						<MenubarSeparator />
 						<MenubarItem onClick={() => {navigate('/cadastro-usuario')}}>Cadastro</MenubarItem>
 						<MenubarSeparator />
