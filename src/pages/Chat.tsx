@@ -76,10 +76,6 @@ export default function Chat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin":
-            "https://temp-tecnologys-web.eorpdr.easypanel.host",
-          "Access-Control-Allow-Headers":
-            "authorization, x-client-info, apikey, content-type",
         },
         body: JSON.stringify(payload),
       });
