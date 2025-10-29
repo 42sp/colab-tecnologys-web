@@ -73,7 +73,7 @@ export default function Chat() {
       console.log("-> Payload enviado para n8n:", payload);
 
       const response = await fetch(N8N_WEBHOOK_URL, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
