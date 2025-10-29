@@ -99,28 +99,26 @@ const CreateEmployeeModal = ({ isOpen, onClose, onSuccess }: Props) => {
     },
   });
 
-const onSubmit = async (data: FormData) => {
-  setLoading(true);
-  try {
-    console.log("📤 Enviando dados completos do funcionário:", data);
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+    try {
+      console.log("📤 Enviando dados completos do funcionário:", data);
 
-    await employeeService.create({
-      ...data,
-      phone: data.phone.replace(/\D/g, ""),
-      role_id: "0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5",
-    });
+      await employeeService.create({
+        ...data,
+        phone: data.phone.replace(/\D/g, ""),
+        roleId: "0cc1e385-a2b4-4b3a-b1c4-014d9d1016b5",
+      });
 
-    console.log("✅ Funcionário criado com sucesso!");
-    onSuccess();
-    reset();
-  } catch (err) {
-    console.error("❌ Erro ao criar funcionário:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+      console.log("✅ Funcionário criado com sucesso!");
+      onSuccess();
+      reset();
+    } catch (err) {
+      console.error("❌ Erro ao criar funcionário:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handlePhoneChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
